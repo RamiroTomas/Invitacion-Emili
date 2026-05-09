@@ -1,0 +1,6 @@
+{
+  "name": "Invitación XV Emilia Tomas",
+  "description": "Una invitación mágica inspirada en La Bella y la Bestia para el decimoquinto cumpleaños de Emilia Tomas.",
+  "requestFramePermissions": ["geolocation"],
+  "majorCapabilities": []
+}
