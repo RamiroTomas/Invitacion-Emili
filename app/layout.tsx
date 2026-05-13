@@ -20,7 +20,7 @@ const cormorant = Cormorant_Garamond({
 
 export const metadata: Metadata = {
   title: 'Invitación XV Emilia Tomas',
-  description: 'Una invitación mágica inspirada en La Bella y la Bestia.',
+  description: 'Quiero que seas parte de mis XV por eso te llega esta invitación mágica',
 };
 
 export default function RootLayout({children}: {children: React.ReactNode}) {
