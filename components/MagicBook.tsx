@@ -140,7 +140,7 @@ export default function MagicBook() {
   };
 
   return (
-    <div className="min-h-screen bg-[#2c1810] flex items-center justify-center p-4 sm:p-8 overflow-hidden perspective-2000 relative">
+    <div className="min-h-screen bg-[#2c1810] flex flex-col items-center justify-center p-4 sm:p-8 overflow-hidden perspective-2000 relative select-none">
       {/* Subtle particle effect or roses in background */}
       <div className="absolute inset-0 opacity-10 pointer-events-none overflow-hidden">
         <div className="absolute top-10 left-10"><Rose className="w-20 h-20 text-[#c62828] blur-sm" /></div>
@@ -244,34 +244,50 @@ export default function MagicBook() {
             </button>
             <button 
               onClick={nextPage} 
-              className={`absolute inset-y-0 right-[30px] w-16 md:w-24 z-30 flex items-center justify-end pr-1 sm:pr-3 text-[#d4af37] opacity-0 hover:opacity-100 transition-opacity cursor-pointer ${currentPage === totalPages - 1 ? 'hidden' : ''}`}
+              className={`absolute inset-y-0 right-1 w-16 md:w-24 z-30 flex items-center justify-end pr-1 sm:pr-3 text-[#d4af37] opacity-0 hover:opacity-100 transition-opacity cursor-pointer ${currentPage === totalPages - 1 ? 'hidden' : ''}`}
             >
               <div className="bg-black/20 p-1 sm:p-2 rounded-full backdrop-blur-sm">
                 <ChevronRight className="w-6 h-6 sm:w-8 sm:h-8 drop-shadow-md" />
               </div>
             </button>
             
-            {/* Page Indicators */}
-            <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-3 z-30">
-              <span className="font-serif text-[10px] text-[#d4af37] tracking-widest uppercase opacity-60">Prev</span>
-              <div className="flex gap-2">
-                {INVITATION_DATA.pages.map((_, i) => (
-                  <div 
-                    key={i} 
-                    className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${i === currentPage ? 'bg-[#d4af37] scale-150' : 'bg-[#d4af37]/20 group-hover:bg-[#d4af37]/40'}`}
-                  />
-                ))}
-              </div>
-              <span className="font-serif text-[10px] text-[#d4af37] tracking-widest uppercase opacity-60">Next</span>
-            </div>
           </motion.div>
         </div>
       </div>
+
+      {/* Page Indicators Outside, Below the book */}
+      <div className="flex items-center justify-center gap-4 sm:gap-8 z-30 py-4 w-full">
+          <button 
+            onClick={prevPage}
+            disabled={currentPage === 0}
+            className={`font-serif text-[10px] sm:text-xs text-[#d4af37] tracking-widest uppercase transition-opacity ${currentPage === 0 ? 'opacity-10' : 'opacity-60 hover:opacity-100'}`}
+          >
+            Prev
+          </button>
+          <div className="flex gap-2 sm:gap-3 px-2">
+            {INVITATION_DATA.pages.map((_, i) => (
+              <button
+                key={i}
+                onClick={() => {
+                  setDirection(i > currentPage ? 1 : -1);
+                  setCurrentPage(i);
+                }}
+                className={`w-1.5 h-1.5 sm:w-2 rounded-full transition-all duration-300 ${i === currentPage ? 'bg-[#d4af37] scale-125 sm:scale-150 shadow-[0_0_8px_rgba(212,175,55,0.6)]' : 'bg-[#d4af37]/20 hover:bg-[#d4af37]/40'}`}
+              />
+            ))}
+          </div>
+          <button 
+            onClick={nextPage}
+            disabled={currentPage === totalPages - 1}
+            className={`font-serif text-[10px] sm:text-xs text-[#d4af37] tracking-widest uppercase transition-opacity ${currentPage === totalPages - 1 ? 'opacity-10' : 'opacity-60 hover:opacity-100'}`}
+          >
+            Next
+          </button>
+        </div>
+      </div>
     </div>
-  </div>
   );
 }
-
 function StandardPage({ page, isPriority }: { page: any, isPriority?: boolean }) {
   return (
     <div className="w-full h-full relative">
@@ -284,7 +300,7 @@ function StandardPage({ page, isPriority }: { page: any, isPriority?: boolean })
         referrerPolicy="no-referrer"
       />
       <div className="absolute inset-0 bg-gradient-to-t from-[#2c1810]/95 via-[#2c1810]/60 to-[#2c1810]/20" />
-      <div className="absolute inset-0 p-8 sm:p-12 flex flex-col justify-end text-center z-10 pb-16">
+      <div className="absolute inset-x-0 bottom-0 p-8 sm:p-12 flex flex-col justify-end text-center z-10 pb-24 sm:pb-20">
         <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl text-[#d4af37] mb-6 tracking-wide drop-shadow-lg uppercase">
           {page.title}
         </h2>
@@ -305,44 +321,53 @@ function StandardPage({ page, isPriority }: { page: any, isPriority?: boolean })
 function SchedulePage() {
   const d = INVITATION_DATA;
   return (
-    <div className="w-full h-full p-6 sm:p-10 flex flex-col items-center justify-center text-center">
-      <div className="absolute top-8 opacity-20">
-         <Rose className="w-20 h-20 text-[#c62828]" />
-      </div>
-      <h2 className="font-display text-3xl sm:text-4xl text-[#d4af37] mb-8 tracking-widest uppercase">
+    <div className="w-full h-full p-4 sm:p-10 flex flex-col items-center justify-center text-center relative overflow-y-auto select-none">
+      <h2 className="font-display text-2xl sm:text-4xl text-[#d4af37] mb-4 sm:mb-8 tracking-widest uppercase relative z-10 shrink-0">
         Nuestra Noche
       </h2>
       
-      <div className="space-y-8 w-full max-w-xs">
-        <div className="flex flex-col items-center gap-2 transition-transform hover:scale-105 duration-300">
-          <div className="w-12 h-12 rounded-full bg-[#d4af37]/10 flex items-center justify-center border border-[#d4af37]/30">
-            <Calendar className="w-5 h-5 text-[#c62828]" />
+      <div className="grid grid-cols-2 gap-x-2 sm:gap-x-4 gap-y-4 sm:gap-y-10 w-full max-w-sm px-2">
+        {/* Row 1: Rose | Date */}
+        <div className="flex flex-col items-center justify-center">
+            <div className="w-16 h-16 sm:w-20 sm:h-20 bg-[#d4af37]/5 rounded-full flex items-center justify-center border border-[#d4af37]/20 shadow-inner">
+                <Rose className="w-10 h-10 sm:w-14 sm:h-14 text-[#c62828]" />
+            </div>
+        </div>
+        
+        <div className="flex flex-col items-center justify-center transition-transform hover:scale-105 duration-300">
+          <div className="w-10 h-10 rounded-full bg-[#d4af37]/10 flex items-center justify-center border border-[#d4af37]/30 mb-2">
+            <Calendar className="w-4 h-4 text-[#c62828]" />
           </div>
           <div>
-            <p className="font-display text-[10px] text-[#d4af37] tracking-widest uppercase">Fecha</p>
-            <p className="font-serif text-lg sm:text-xl">{d.date}</p>
+            <p className="font-display text-[9px] text-[#d4af37] tracking-widest uppercase">Fecha</p>
+            <p className="font-serif text-base sm:text-lg">{d.date}</p>
           </div>
         </div>
 
-        <div className="flex flex-col items-center gap-2 transition-transform hover:scale-105 duration-300">
-          <div className="w-12 h-12 rounded-full bg-[#d4af37]/10 flex items-center justify-center border border-[#d4af37]/30">
-            <Clock className="w-5 h-5 text-[#c62828]" />
+        {/* Row 2: Time | Dress Code */}
+        <div className="flex flex-col items-center justify-center transition-transform hover:scale-105 duration-300">
+          <div className="w-10 h-10 rounded-full bg-[#d4af37]/10 flex items-center justify-center border border-[#d4af37]/30 mb-2">
+            <Clock className="w-4 h-4 text-[#c62828]" />
           </div>
           <div>
-            <p className="font-display text-[10px] text-[#d4af37] tracking-widest uppercase">Horario</p>
-            <p className="font-serif text-lg sm:text-xl">{d.time}</p>
+            <p className="font-display text-[9px] text-[#d4af37] tracking-widest uppercase">Horario</p>
+            <p className="font-serif text-base sm:text-lg">{d.time}</p>
           </div>
         </div>
 
-        <div className="flex flex-col items-center gap-2 transition-transform hover:scale-105 duration-300">
-          <div className="w-12 h-12 rounded-full bg-[#d4af37]/10 flex items-center justify-center border border-[#d4af37]/30">
-            <Shirt className="w-5 h-5 text-[#c62828]" />
+        <div className="flex flex-col items-center justify-center transition-transform hover:scale-105 duration-300">
+          <div className="w-10 h-10 rounded-full bg-[#d4af37]/10 flex items-center justify-center border border-[#d4af37]/30 mb-2">
+            <Shirt className="w-4 h-4 text-[#c62828]" />
           </div>
-          <div>
-            <p className="font-display text-[10px] text-[#d4af37] tracking-widest uppercase">Dress Code</p>
-            <p className="font-serif text-sm sm:text-base leading-snug px-4">{d.dressCode}</p>
+          <div className="max-w-[120px]">
+            <p className="font-display text-[9px] text-[#d4af37] tracking-widest uppercase">Dress Code</p>
+            <p className="font-serif text-xs sm:text-sm leading-tight">{d.dressCode}</p>
           </div>
         </div>
+      </div>
+      
+      <div className="mt-8 opacity-20 pointer-events-none">
+          <div className="w-24 h-[1px] bg-[#d4af37] mx-auto" />
       </div>
     </div>
   );
