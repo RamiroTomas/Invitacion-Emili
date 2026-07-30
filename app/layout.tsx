@@ -21,6 +21,12 @@ const cormorant = Cormorant_Garamond({
 export const metadata: Metadata = {
   title: 'Invitación XV Emilia Tomas',
   description: 'Quiero que seas parte de mis XV por eso te llega esta invitación mágica',
+  openGraph: {
+    title: 'Invitación XV Emilia Tomas',
+    description: 'Quiero que seas parte de mis XV por eso te llega esta invitación mágica',
+    type: 'website',
+    locale: 'es_ES',
+  },
 };
 
 export default function RootLayout({children}: {children: React.ReactNode}) {

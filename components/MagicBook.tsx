@@ -178,6 +178,8 @@ export default function MagicBook() {
                     <RSVPPage />
                   ) : INVITATION_DATA.pages[currentPage].type === 'gift' ? (
                     <GiftPage />
+                  ) : INVITATION_DATA.pages[currentPage].type === 'teespero' ? (
+                    <TeEsperoPage page={INVITATION_DATA.pages[currentPage]} />
                   ) : (
                     <StandardPage page={INVITATION_DATA.pages[currentPage]} isPriority={currentPage <= 1} />
                   )}
@@ -448,7 +450,7 @@ function GiftPage() {
       </div>
       
       <h2 className="font-display text-2xl sm:text-3xl text-[#d4af37] mb-6 tracking-widest uppercase">
-        Regalo
+        {d.pages.find(p => p.type === 'gift')?.title || "Un Detalle"}
       </h2>
       
       <p className="font-serif italic text-sm sm:text-base text-[#2c1810]/80 mb-8 leading-relaxed px-4">
@@ -467,6 +469,63 @@ function GiftPage() {
         
         <p className="text-[10px] uppercase tracking-[0.2em] text-[#c62828] italic font-semibold pt-4">
            #BellezaYMagia ✨
+        </p>
+      </div>
+    </div>
+  );
+}
+
+function TeEsperoPage({ page }: { page: any }) {
+  return (
+    <div className="w-full h-full relative flex flex-col justify-between items-center text-center p-8 sm:p-12 overflow-hidden">
+      <Image 
+        src={page.image} 
+        alt={page.title} 
+        fill 
+        className="object-cover" 
+        referrerPolicy="no-referrer"
+      />
+      <div className="absolute inset-0 bg-gradient-to-t from-[#2c1810] via-[#2c1810]/75 to-[#2c1810]/50 z-0" />
+
+      {/* Decorative Top Accent */}
+      <div className="relative z-10 pt-4 flex flex-col items-center gap-2">
+        <p className="font-display text-[10px] sm:text-xs text-[#d4af37] tracking-[0.35em] uppercase font-semibold">
+          {INVITATION_DATA.name} • XV AÑOS
+        </p>
+        <div className="w-24 h-[1px] bg-[#d4af37]/60" />
+      </div>
+
+      {/* Main Title & Message */}
+      <div className="relative z-10 flex flex-col items-center my-auto px-2">
+        <motion.div
+          initial={{ scale: 0.9, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ duration: 0.6 }}
+          className="mb-4"
+        >
+          <Rose className="w-12 h-12 sm:w-16 sm:h-16 text-[#EF584F] drop-shadow-[0_0_15px_rgba(239,88,79,0.7)] animate-pulse mx-auto" />
+        </motion.div>
+
+        <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl text-[#FFCE59] tracking-widest uppercase mb-4 drop-shadow-[0_4px_25px_rgba(255,206,89,0.7)] font-bold">
+          {page.title}
+        </h2>
+
+        <p className="font-serif text-base sm:text-xl leading-relaxed text-[#fdfaf1] italic max-w-xs text-shadow-gold mb-6">
+          &quot;{page.content}&quot;
+        </p>
+
+        <div className="inline-block px-4 py-2 bg-[#d4af37]/15 rounded-full border border-[#d4af37]/40 backdrop-blur-sm">
+          <p className="font-display text-xs sm:text-sm text-[#FFCE59] tracking-[0.2em] uppercase font-bold">
+            19 • SEPTIEMBRE • 2026
+          </p>
+        </div>
+      </div>
+
+      {/* Decorative Bottom */}
+      <div className="relative z-10 pb-12 sm:pb-8 flex flex-col items-center gap-2">
+        <div className="w-16 h-[1px] bg-[#d4af37]/40" />
+        <p className="font-display text-[9px] text-[#d4af37]/80 tracking-[0.3em] uppercase">
+          #BellezaYMagia ✨
         </p>
       </div>
     </div>

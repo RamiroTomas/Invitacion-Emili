@@ -1,6 +1,6 @@
 export const INVITATION_DATA = {
   name: "Emilia Tomas",
-  date: "29 de Agosto, 2026",
+  date: "19 de Septiembre, 2026",
   time: "21:00 hs",
   location: {
     name: "Chacra las calas",
@@ -16,7 +16,20 @@ export const INVITATION_DATA = {
     {
       title: "La Rosa Encantada",
       content: "Un sueño que comenzó hace 15 años y que hoy se hace realidad bajo la luz de una rosa mágica.",
-      image: "https://images.unsplash.com/photo-1559563362-c667ba5f5480?auto=format&fit=crop&q=80&w=800&h=1200"
+      image: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&q=80&w=800&h=1200"
+    },
+    {
+      title: "Cuándo y Qué vestir",
+      type: "schedule"
+    },
+    {
+      title: "Mis Recuerdos",
+      content: "Cada segundo vivido me trajo hasta aquí, lista para empezar el capítulo más hermoso.",
+      image: "https://images.unsplash.com/photo-1566174053879-31528523f8ae?auto=format&fit=crop&q=80&w=800&h=1200"
+    },
+    {
+      title: "Dónde es la magia",
+      type: "location"
     },
     {
       title: "El Gran Baile",
@@ -24,20 +37,28 @@ export const INVITATION_DATA = {
       image: "https://images.unsplash.com/photo-1519167758481-83f550bb49b3?auto=format&fit=crop&q=80&w=800&h=1200"
     },
     {
-      title: "Cuándo y Qué vestir",
-      type: "schedule"
-    },
-    {
-      title: "Dónde es la magia",
-      type: "location"
-    },
-    {
       title: "Confirmar Asistencia",
       type: "rsvp"
     },
     {
-      title: "Regalo",
+      title: "Dulces 15",
+      content: "Quince años guardando sonrisas, coleccionando momentos y soñando con los ojos abiertos.",
+      image: "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&q=80&w=800&h=1200"
+    },
+    {
+      title: "Noche de Magia",
+      content: "Una velada pensada para brindar, bailar y reír rodeada de las personas que más quiero.",
+      image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=800&h=1200"
+    },
+    {
+      title: "Un Detalle",
       type: "gift"
+    },
+    {
+      title: "¡TE ESPERO!",
+      content: "Para compartir juntos la noche más mágica e inolvidable de mi vida.",
+      image: "https://images.unsplash.com/photo-1527529482837-4698179dc6ce?auto=format&fit=crop&q=80&w=800&h=1200",
+      type: "teespero"
     }
   ]
 };
