@@ -273,15 +273,15 @@ function StandardPage({ page, isPriority }: { page: any, isPriority?: boolean })
         className="object-cover" 
         referrerPolicy="no-referrer"
       />
-      <div className="absolute inset-0 bg-gradient-to-t from-[#2c1810]/95 via-[#2c1810]/60 to-[#2c1810]/20" />
-      <div className="absolute inset-x-0 bottom-0 p-8 sm:p-12 flex flex-col justify-end text-center z-10 pb-24 sm:pb-20">
-        <p className="font-serif text-lg sm:text-xl leading-relaxed text-[#fdfaf1] italic text-shadow-gold">
+      <div className="absolute inset-0 bg-gradient-to-t from-[#2c1810]/98 via-[#2c1810]/70 to-transparent" />
+      <div className="absolute inset-x-0 bottom-0 px-6 sm:px-12 pb-12 sm:pb-16 flex flex-col justify-end text-center z-10">
+        <p className="font-serif text-base sm:text-xl leading-relaxed text-[#fdfaf1] italic text-shadow-gold max-w-sm sm:max-w-md mx-auto">
           {page.content}
         </p>
-        <div className="mt-8 flex flex-col items-center gap-2">
-          <div className="w-32 h-[1px] bg-[#d4af37] opacity-60 rounded-full" />
-          <div className="relative mt-2">
-            <Rose className="w-8 h-8 text-[#c62828] animate-pulse" />
+        <div className="mt-4 sm:mt-6 flex flex-col items-center gap-2">
+          <div className="w-24 sm:w-32 h-[1px] bg-[#d4af37] opacity-60 rounded-full" />
+          <div className="relative mt-1 sm:mt-2">
+            <Rose className="w-7 h-7 sm:w-8 sm:h-8 text-[#c62828] animate-pulse" />
           </div>
         </div>
       </div>
@@ -293,19 +293,19 @@ function SchedulePage() {
   const d = INVITATION_DATA;
   return (
     <div className="w-full h-full p-4 sm:p-10 flex flex-col items-center justify-center text-center relative overflow-y-auto select-none">
-      <h2 className="font-display text-2xl sm:text-3xl text-[#d4af37] mb-6 sm:mb-10 tracking-widest uppercase relative z-10 shrink-0">
+      <h2 className="font-display text-2xl sm:text-3xl text-[#d4af37] mb-6 sm:mb-8 tracking-widest uppercase relative z-10 shrink-0">
         Nuestra Noche
       </h2>
       
-      <div className="flex flex-col items-center gap-6 sm:gap-8 w-full max-w-xs px-2">
+      <div className="flex flex-col items-center gap-6 sm:gap-8 w-full max-w-sm px-2">
         {/* Date */}
         <div className="flex flex-col items-center justify-center transition-transform hover:scale-105 duration-300">
           <div className="w-10 h-10 rounded-full bg-[#d4af37]/10 flex items-center justify-center border border-[#d4af37]/30 mb-2">
             <Calendar className="w-4 h-4 text-[#c62828]" />
           </div>
           <div>
-            <p className="font-display text-[9px] text-[#d4af37] tracking-widest uppercase">Fecha</p>
-            <p className="font-serif text-base sm:text-lg">{d.date}</p>
+            <p className="font-display text-[10px] sm:text-xs text-[#d4af37] tracking-widest uppercase mb-0.5">Fecha</p>
+            <p className="font-serif text-lg sm:text-xl font-medium text-[#2c1810]">{d.date}</p>
           </div>
         </div>
 
@@ -315,8 +315,8 @@ function SchedulePage() {
             <Clock className="w-4 h-4 text-[#c62828]" />
           </div>
           <div>
-            <p className="font-display text-[9px] text-[#d4af37] tracking-widest uppercase">Horario</p>
-            <p className="font-serif text-base sm:text-lg">{d.time}</p>
+            <p className="font-display text-[10px] sm:text-xs text-[#d4af37] tracking-widest uppercase mb-0.5">Horario</p>
+            <p className="font-serif text-lg sm:text-xl font-medium text-[#2c1810]">{d.time}</p>
           </div>
         </div>
 
@@ -325,14 +325,14 @@ function SchedulePage() {
           <div className="w-10 h-10 rounded-full bg-[#d4af37]/10 flex items-center justify-center border border-[#d4af37]/30 mb-2">
             <Shirt className="w-4 h-4 text-[#c62828]" />
           </div>
-          <div className="max-w-[200px]">
-            <p className="font-display text-[9px] text-[#d4af37] tracking-widest uppercase">Dress Code</p>
-            <p className="font-serif text-xs sm:text-sm leading-tight italic opacity-80">{d.dressCode}</p>
+          <div className="max-w-[260px] sm:max-w-[280px]">
+            <p className="font-display text-[10px] sm:text-xs text-[#d4af37] tracking-widest uppercase mb-1">Dress Code</p>
+            <p className="font-serif text-sm sm:text-base leading-snug italic font-medium text-[#2c1810]">{d.dressCode}</p>
           </div>
         </div>
 
         {/* Rose at the bottom */}
-        <div className="mt-4 flex flex-col items-center justify-center">
+        <div className="mt-2 flex flex-col items-center justify-center">
             <Rose className="w-8 h-8 sm:w-10 sm:h-10 text-[#c62828]" />
         </div>
       </div>
@@ -354,9 +354,9 @@ function LocationPage() {
             <MapPin className="w-5 h-5 text-[#c62828]" />
           </div>
           <div className="text-center">
-            <p className="font-display text-[10px] text-[#d4af37] tracking-widest uppercase">Castillo</p>
-            <p className="font-serif text-base sm:text-lg">{d.location.name}</p>
-            <p className="font-serif text-xs text-[#2c1810]/60">{d.location.address}</p>
+            <p className="font-display text-[10px] sm:text-xs text-[#d4af37] tracking-widest uppercase mb-0.5">Castillo</p>
+            <p className="font-serif text-base sm:text-lg text-[#2c1810] font-semibold">{d.location.name}</p>
+            <p className="font-serif text-xs sm:text-sm text-[#2c1810] font-medium">{d.location.address}</p>
           </div>
         </div>
         
@@ -616,7 +616,7 @@ function RSVPPage() {
               required 
               value={name}
               onChange={(e) => setName(e.target.value)}
-              placeholder="Ej: Sofía y Familia"
+              placeholder="Ej: Emilia Tomas"
               className="w-full bg-white/80 border border-[#d4af37]/30 rounded-md p-2 focus:outline-none focus:border-[#d4af37] font-serif text-xs sm:text-sm text-[#2c1810]" 
             />
           </div>
@@ -655,7 +655,7 @@ function RSVPPage() {
             <input 
               value={song}
               onChange={(e) => setSong(e.target.value)}
-              placeholder="Ej: Taylor Swift - Cruel Summer"
+              placeholder="Ej: Milo J - Rara Vez"
               className="w-full bg-white/80 border border-[#d4af37]/30 rounded-md p-2 focus:outline-none focus:border-[#d4af37] font-serif text-xs text-[#2c1810]" 
             />
           </div>
@@ -884,16 +884,16 @@ function GiftPage() {
         {d.pages.find(p => p.type === 'gift')?.title || "Un Detalle"}
       </h2>
       
-      <p className="font-serif italic text-sm sm:text-base text-[#2c1810]/80 mb-8 leading-relaxed px-4">
+      <p className="font-serif italic text-sm sm:text-base text-[#2c1810] font-medium mb-8 leading-relaxed px-4">
         {d.giftRegistry.message}
       </p>
 
       <div className="w-full max-w-xs space-y-4">
-        <div className="bg-[#d4af37]/5 p-5 rounded-xl border border-dashed border-[#d4af37]/40 relative">
-          <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#fdfaf1] px-3 font-display text-[8px] text-[#d4af37] tracking-widest uppercase border border-[#d4af37]/20 rounded-full">
+        <div className="bg-[#d4af37]/10 p-5 rounded-xl border border-dashed border-[#d4af37]/50 relative">
+          <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#fdfaf1] px-3 font-display text-[9px] text-[#d4af37] tracking-widest uppercase border border-[#d4af37]/30 rounded-full font-bold">
             Datos Bancarios
           </div>
-          <p className="font-mono text-[11px] sm:text-xs whitespace-pre-line text-[#2c1810]/80 leading-relaxed">
+          <p className="font-mono text-xs sm:text-sm whitespace-pre-line text-[#2c1810] font-semibold leading-relaxed">
             {d.giftRegistry.bankDetails}
           </p>
         </div>
