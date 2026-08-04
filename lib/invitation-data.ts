@@ -26,22 +26,22 @@ export const INVITATION_DATA = {
     {
       title: "La Rosa Encantada",
       content: '"Érase una vez una tierra lejana"... una joven festejaba sus XV años, una noche que quedaría para siempre en su corazón',
-      image: "/images/NAC02340-1.png"
+      image: "/images/NAC02340-1.jpg"
     },
     {
       title: "Mis Recuerdos",
       content: "Te invito a compartir este festejo donde los sueños y el amor por los momentos especiales se hacen realidad.",
-      image: "/images/NAC02484.png"
+      image: "/images/NAC02484.jpg"
     },
     {
       title: "El Gran Baile",
       content: "Inspirada en un cuento que nos enseñó a descubrir la belleza en los pequeños detalles, soñé con una fiesta llena de rosas, música y una tiara",
-      image: "/images/NAC03363.png"
+      image: "/images/NAC03363.jpg"
     },
     {
       title: "Dulces 15",
       content: "Solo falta un detalle para completar este cuento, que estés allí. Te espero para compartir mi noche soñada",
-      image: "/images/NAC03414.png"
+      image: "/images/NAC03414.jpg"
     },
     {
       title: "Cuándo y Qué vestir",
@@ -62,7 +62,7 @@ export const INVITATION_DATA = {
     {
       title: "¡TE ESPERO!",
       content: "",
-      image: "/images/NAC04019.png",
+      image: "/images/NAC04019.jpg",
       type: "teespero"
     }
   ]
