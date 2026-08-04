@@ -1,5 +1,5 @@
 import type {Metadata} from 'next';
-import { Cinzel, Cormorant_Garamond, Inter } from 'next/font/google';
+import { Cinzel, Cormorant_Garamond, Inter, Great_Vibes } from 'next/font/google';
 import './globals.css';
 
 const inter = Inter({
@@ -18,6 +18,12 @@ const cormorant = Cormorant_Garamond({
   weight: ['300', '400', '500', '600', '700'],
 });
 
+const greatVibes = Great_Vibes({
+  weight: '400',
+  subsets: ['latin'],
+  variable: '--font-cursive',
+});
+
 export const metadata: Metadata = {
   title: 'Invitación XV Emilia Tomas',
   description: 'Quiero que seas parte de mis XV por eso te llega esta invitación mágica',
@@ -31,7 +37,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({children}: {children: React.ReactNode}) {
   return (
-    <html lang="es" className={`${inter.variable} ${cinzel.variable} ${cormorant.variable}`}>
+    <html lang="es" className={`${inter.variable} ${cinzel.variable} ${cormorant.variable} ${greatVibes.variable}`}>
       <body suppressHydrationWarning className="font-serif bg-[#fdfaf1] text-[#2c1810]">
         {children}
       </body>

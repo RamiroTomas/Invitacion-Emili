@@ -7,20 +7,28 @@ import { BookOpen } from 'lucide-react';
 const Rose = ({ className }: { className?: string }) => (
   <svg 
     xmlns="http://www.w3.org/2000/svg" 
-    version="1.1" 
-    id="Layer_1" 
-    x="0px" 
-    y="0px" 
     viewBox="0 0 512 512" 
-    className={className}
+    fill="currentColor"
+    className={`shrink-0 ${className || 'w-8 h-8'}`}
   >
-<g>
-	<path fill="#EF584F" d="M345.497,208.059c0,48.021-38.934,86.955-86.955,86.955s-86.955-38.934-86.955-86.955   c0-85.977-8.911-143.084-8.471-142.967c10.776,2.756,21.133,5.833,31.059,9.175c21.836,7.377,41.582,16.081,59.061,25.647   c40.625,22.237,68.968,49.104,82.734,74.635c4.191,7.767,7.025,15.407,8.451,22.755   C345.135,200.965,345.497,204.561,345.497,208.059z"/>
-	<path fill="#EF584F" d="M344.422,197.302c-1.427-7.347-4.259-14.987-8.451-22.755c-4.758-8.813-11.255-17.791-19.384-26.682   c-15.427-16.854-36.755-33.395-63.35-47.952c13.385-8.148,28.382-15.779,44.864-22.618c9.243-3.839,18.954-7.425,29.115-10.718   c8.187-2.648,16.668-5.11,25.432-7.347C353.078,59.113,344.481,114.227,344.422,197.302z"/>
-	<path fill="#EF584F" d="M298.102,77.294c-16.482,6.839-31.479,14.47-44.864,22.618   c-12.692-6.947-26.575-13.434-41.582-19.287c-5.667-2.218-11.489-4.338-17.479-6.36c-2.13-30.22-4.817-47.991-4.592-47.932   c21.426,5.471,40.878,12.467,58.182,20.468C267.424,55.908,284.296,66.313,298.102,77.294z"/>
-	<path fill="#EF584F" d="M327.217,66.577c-10.161,3.293-19.872,6.878-29.115,10.718   c-13.805-10.982-30.679-21.386-50.336-30.493c21.74-14.88,50.209-28.031,84.366-36.755   C332.366,9.988,329.093,31.365,327.217,66.577z"/>
-</g>
-</svg>
+    <g>
+      <path d="M345.497,208.059c0,48.021-38.934,86.955-86.955,86.955s-86.955-38.934-86.955-86.955   c0-85.977-8.911-143.084-8.471-142.967c10.776,2.756,21.133,5.833,31.059,9.175c21.836,7.377,41.582,16.081,59.061,25.647   c40.625,22.237,68.968,49.104,82.734,74.635c4.191,7.767,7.025,15.407,8.451,22.755   C345.135,200.965,345.497,204.561,345.497,208.059z"/>
+      <path d="M344.422,197.302c-1.427-7.347-4.259-14.987-8.451-22.755c-4.758-8.813-11.255-17.791-19.384-26.682   c-15.427-16.854-36.755-33.395-63.35-47.952c13.385-8.148,28.382-15.779,44.864-22.618c9.243-3.839,18.954-7.425,29.115-10.718   c8.187-2.648,16.668-5.11,25.432-7.347C353.078,59.113,344.481,114.227,344.422,197.302z"/>
+      <path d="M298.102,77.294c-16.482,6.839-31.479,14.47-44.864,22.618   c-12.692-6.947-26.575-13.434-41.582-19.287c-5.667-2.218-11.489-4.338-17.479-6.36c-2.13-30.22-4.817-47.991-4.592-47.932   c21.426,5.471,40.878,12.467,58.182,20.468C267.424,55.908,284.296,66.313,298.102,77.294z"/>
+      <path d="M327.217,66.577c-10.161,3.293-19.872,6.878-29.115,10.718   c-13.805-10.982-30.679-21.386-50.336-30.493c21.74-14.88,50.209-28.031,84.366-36.755   C332.366,9.988,329.093,31.365,327.217,66.577z"/>
+    </g>
+  </svg>
+);
+
+const Sparkle = ({ className, style }: { className?: string; style?: React.CSSProperties }) => (
+  <svg 
+    viewBox="0 0 24 24" 
+    fill="currentColor" 
+    className={`w-5 h-5 shrink-0 drop-shadow-[0_0_10px_rgba(212,175,55,0.8)] ${className || ''}`}
+    style={style}
+  >
+    <path d="M12 0L14.59 9.41L24 12L14.59 14.59L12 24L9.41 14.59L0 12L9.41 9.41L12 0Z" />
+  </svg>
 );
 
 interface EnvelopeProps {
@@ -83,30 +91,51 @@ export default function InvitationEnvelope({ onOpen }: EnvelopeProps) {
           <motion.div
             animate={{ rotateY: isOpen ? -120 : 0 }}
             transition={{ duration: 1.2, ease: [0.32, 0.72, 0, 1] }}
-            className="absolute inset-0 bg-[#FFCE59] rounded-r-xl shadow-[-5px_0_20px_rgba(0,0,0,0.6)] origin-left z-50 flex flex-col items-center justify-center p-8 text-center"
+            className="absolute inset-0 bg-[#FFCE59] rounded-r-xl shadow-[-5px_0_20px_rgba(0,0,0,0.6)] origin-left z-50 flex flex-col items-center justify-center p-8 text-center overflow-hidden"
             style={{ backfaceVisibility: 'hidden' }}
           >
             {/* Inner Spine shadow on the cover itself */}
             <div className="absolute left-0 top-0 bottom-0 w-8 sm:w-16 bg-gradient-to-r from-black/50 via-black/10 to-transparent z-40 pointer-events-none" />
             
             {/* Vintage borders / decorations */}
-            <div className="absolute inset-4 sm:inset-6 border-2 border-double border-[#e6b840]/30 rounded-lg pointer-events-none" />
-            <div className="absolute inset-6 sm:inset-8 border border-[#e6b840]/20 rounded-md pointer-events-none" />
+            <div className="absolute inset-4 sm:inset-6 border-2 border-double border-[#2c1810]/30 rounded-lg pointer-events-none" />
+            <div className="absolute inset-6 sm:inset-8 border border-[#2c1810]/20 rounded-md pointer-events-none" />
 
-            <div className="relative z-30 flex flex-col items-center justify-center h-full pt-10">
-              <Rose className="w-12 h-12 text-[#c62828] mb-4 drop-shadow-[0_0_8px_rgba(198,40,40,0.5)]" />
-              <h1 className="font-display text-4xl sm:text-5xl md:text-6xl text-[#2c1810] mb-6 tracking-widest uppercase text-shadow-sm">
-                EMILIA
+            {/* Brillitos Decorativos animaciones en la tapa */}
+            <div className="absolute inset-0 pointer-events-none z-20 overflow-hidden">
+              <Sparkle className="absolute top-8 left-8 animate-sparkle-1 text-[#2c1810]" />
+              <Sparkle className="absolute top-12 right-10 animate-sparkle-2 text-[#2c1810]/80" />
+              <Sparkle className="absolute top-1/4 left-10 animate-sparkle-3 text-[#2c1810]/60" />
+              <Sparkle className="absolute top-1/3 right-8 animate-sparkle-1 text-[#2c1810]" />
+              <Sparkle className="absolute bottom-1/3 left-8 animate-sparkle-2 text-[#2c1810]/80" />
+              <Sparkle className="absolute bottom-24 right-10 animate-sparkle-3 text-[#2c1810]" />
+              <Sparkle className="absolute bottom-12 left-1/2 -translate-x-1/2 animate-sparkle-1 text-[#2c1810]/70" />
+            </div>
+
+            <div className="relative z-30 flex flex-col items-center justify-center h-full pt-6">
+              <div className="flex items-center gap-2 mb-2">
+                <div className="w-8 h-[1px] bg-[#2c1810]/50" />
+                <p className="font-display text-[10px] sm:text-xs text-[#2c1810] tracking-[0.35em] uppercase font-bold">
+                  MIS XV AÑOS
+                </p>
+                <div className="w-8 h-[1px] bg-[#2c1810]/50" />
+              </div>
+
+              {/* Delicate Cursive Lettering for Emilia */}
+              <h1 className="font-cursive text-6xl sm:text-7xl md:text-8xl text-[#2c1810] tracking-wide my-1 py-1 drop-shadow-sm">
+                Emilia
               </h1>
-              <div className="w-16 h-[2px] bg-[#2c1810]/40 mb-6" />
-              <p className="font-serif text-xl sm:text-2xl italic text-[#2c1810]/80">Mis 15 Años</p>
-              
-              <div className="mt-12 flex flex-col items-center gap-4 group">
-                 <div className="w-16 h-16 rounded-full border-2 border-[#2c1810] flex items-center justify-center group-hover:bg-[#2c1810]/20 transition-all duration-300 bg-[#fdfaf1]/70 shadow-lg scale-110">
-                    <BookOpen className="w-8 h-8 text-[#2c1810]" />
+
+              <div className="w-20 h-[1px] bg-[#2c1810]/40 my-2" />
+
+              <Rose className="w-10 h-10 text-[#c62828] my-2 drop-shadow-[0_0_8px_rgba(198,40,40,0.5)] animate-pulse" />
+
+              <div className="mt-8 flex flex-col items-center gap-4 group">
+                 <div className="w-14 h-14 rounded-full border-2 border-[#2c1810] flex items-center justify-center group-hover:bg-[#2c1810]/20 transition-all duration-300 bg-[#fdfaf1]/70 shadow-lg scale-110">
+                    <BookOpen className="w-7 h-7 text-[#2c1810]" />
                  </div>
                  {!isOpen && (
-                   <div className="px-4 py-2 bg-[#2c1810]/80 rounded-full backdrop-blur-sm shadow-md border border-[#e6b840]/30">
+                   <div className="px-4 py-2 bg-[#2c1810]/85 rounded-full backdrop-blur-sm shadow-md border border-[#e6b840]/40">
                      <p className="font-display text-[10px] sm:text-xs text-[#fdfaf1] tracking-[0.2em] uppercase animate-pulse">
                        Toca para abrir el libro de magia
                      </p>
@@ -124,7 +153,7 @@ export default function InvitationEnvelope({ onOpen }: EnvelopeProps) {
           </motion.div>
 
           {/* Under the Cover (The First Page Fake View to prevent flashing white) */}
-          <div className="absolute inset-1 sm:inset-2 pl-2 sm:pl-4 bg-[#parchment] rounded-r-lg shadow-inner flex items-center justify-center overflow-hidden z-10 bg-[#fdfaf1]" />
+          <div className="absolute inset-1 sm:inset-2 pl-2 sm:pl-4 rounded-r-lg shadow-inner flex items-center justify-center overflow-hidden z-10 bg-[#fdfaf1]" />
         </div>
       </motion.div>
     </div>

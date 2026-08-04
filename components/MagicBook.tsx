@@ -1,26 +1,36 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { ChevronRight, ChevronLeft, MapPin, Calendar, Clock, Shirt, Gift, Camera, Send, Heart } from 'lucide-react';
+import { ChevronRight, ChevronLeft, MapPin, Calendar, Clock, Shirt, Gift, Camera, Send, Heart, MessageCircle, CheckCircle2, Music, Utensils, X, Maximize2, ExternalLink, Share2, Trash2, Phone, Upload, Loader2, Check, CloudUpload, LogOut, CreditCard, Image as ImageIcon } from 'lucide-react';
+import { initAuth, googleSignIn, logout, uploadFileToDrive, getOrCreateDriveFolder } from '@/lib/firebase-auth';
+import type { User } from 'firebase/auth';
 
 const Rose = ({ className }: { className?: string }) => (
   <svg 
     xmlns="http://www.w3.org/2000/svg" 
-    version="1.1" 
-    id="Layer_1" 
-    x="0px" 
-    y="0px" 
     viewBox="0 0 512 512" 
-    className={className}
+    fill="currentColor"
+    className={`shrink-0 ${className || 'w-8 h-8'}`}
   >
-<g>
-	<path fill="#EF584F" d="M345.497,208.059c0,48.021-38.934,86.955-86.955,86.955s-86.955-38.934-86.955-86.955   c0-85.977-8.911-143.084-8.471-142.967c10.776,2.756,21.133,5.833,31.059,9.175c21.836,7.377,41.582,16.081,59.061,25.647   c40.625,22.237,68.968,49.104,82.734,74.635c4.191,7.767,7.025,15.407,8.451,22.755   C345.135,200.965,345.497,204.561,345.497,208.059z"/>
-	<path fill="#EF584F" d="M344.422,197.302c-1.427-7.347-4.259-14.987-8.451-22.755c-4.758-8.813-11.255-17.791-19.384-26.682   c-15.427-16.854-36.755-33.395-63.35-47.952c13.385-8.148,28.382-15.779,44.864-22.618c9.243-3.839,18.954-7.425,29.115-10.718   c8.187-2.648,16.668-5.11,25.432-7.347C353.078,59.113,344.481,114.227,344.422,197.302z"/>
-	<path fill="#EF584F" d="M298.102,77.294c-16.482,6.839-31.479,14.47-44.864,22.618   c-12.692-6.947-26.575-13.434-41.582-19.287c-5.667-2.218-11.489-4.338-17.479-6.36c-2.13-30.22-4.817-47.991-4.592-47.932   c21.426,5.471,40.878,12.467,58.182,20.468C267.424,55.908,284.296,66.313,298.102,77.294z"/>
-	<path fill="#EF584F" d="M327.217,66.577c-10.161,3.293-19.872,6.878-29.115,10.718   c-13.805-10.982-30.679-21.386-50.336-30.493c21.74-14.88,50.209-28.031,84.366-36.755   C332.366,9.988,329.093,31.365,327.217,66.577z"/>
-</g>
-</svg>
+    <g>
+      <path d="M345.497,208.059c0,48.021-38.934,86.955-86.955,86.955s-86.955-38.934-86.955-86.955   c0-85.977-8.911-143.084-8.471-142.967c10.776,2.756,21.133,5.833,31.059,9.175c21.836,7.377,41.582,16.081,59.061,25.647   c40.625,22.237,68.968,49.104,82.734,74.635c4.191,7.767,7.025,15.407,8.451,22.755   C345.135,200.965,345.497,204.561,345.497,208.059z"/>
+      <path d="M344.422,197.302c-1.427-7.347-4.259-14.987-8.451-22.755c-4.758-8.813-11.255-17.791-19.384-26.682   c-15.427-16.854-36.755-33.395-63.35-47.952c13.385-8.148,28.382-15.779,44.864-22.618c9.243-3.839,18.954-7.425,29.115-10.718   c8.187-2.648,16.668-5.11,25.432-7.347C353.078,59.113,344.481,114.227,344.422,197.302z"/>
+      <path d="M298.102,77.294c-16.482,6.839-31.479,14.47-44.864,22.618   c-12.692-6.947-26.575-13.434-41.582-19.287c-5.667-2.218-11.489-4.338-17.479-6.36c-2.13-30.22-4.817-47.991-4.592-47.932   c21.426,5.471,40.878,12.467,58.182,20.468C267.424,55.908,284.296,66.313,298.102,77.294z"/>
+      <path d="M327.217,66.577c-10.161,3.293-19.872,6.878-29.115,10.718   c-13.805-10.982-30.679-21.386-50.336-30.493c21.74-14.88,50.209-28.031,84.366-36.755   C332.366,9.988,329.093,31.365,327.217,66.577z"/>
+    </g>
+  </svg>
+);
+
+const Sparkle = ({ className, style }: { className?: string; style?: React.CSSProperties }) => (
+  <svg 
+    viewBox="0 0 24 24" 
+    fill="currentColor" 
+    className={`w-5 h-5 text-[#FFCE59] drop-shadow-[0_0_10px_rgba(255,206,89,0.9)] ${className || ''}`}
+    style={style}
+  >
+    <path d="M12 0L14.59 9.41L24 12L14.59 14.59L12 24L9.41 14.59L0 12L9.41 9.41L12 0Z" />
+  </svg>
 );
 import { INVITATION_DATA } from '@/lib/invitation-data';
 import Image from 'next/image';
@@ -129,7 +139,7 @@ export default function MagicBook() {
           {/* Hidden Preload for Images */}
           <div className="hidden">
             {INVITATION_DATA.pages.map((p, idx) => (
-              p.image ? <Image key={idx} src={p.image} alt="preload" width={100} height={100} /> : null
+              p.image ? <Image key={idx} src={p.image} alt="preload" width={100} height={100} unoptimized /> : null
             ))}
           </div>
 
@@ -250,24 +260,23 @@ export default function MagicBook() {
     </div>
   );
 }
+
 function StandardPage({ page, isPriority }: { page: any, isPriority?: boolean }) {
   return (
     <div className="w-full h-full relative">
       <Image 
         src={page.image} 
-        alt={page.title} 
+        alt="Foto" 
         fill 
         priority={isPriority}
+        unoptimized
         className="object-cover" 
         referrerPolicy="no-referrer"
       />
       <div className="absolute inset-0 bg-gradient-to-t from-[#2c1810]/95 via-[#2c1810]/60 to-[#2c1810]/20" />
       <div className="absolute inset-x-0 bottom-0 p-8 sm:p-12 flex flex-col justify-end text-center z-10 pb-24 sm:pb-20">
-        <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl text-[#d4af37] mb-6 tracking-wide drop-shadow-lg uppercase">
-          {page.title}
-        </h2>
         <p className="font-serif text-lg sm:text-xl leading-relaxed text-[#fdfaf1] italic text-shadow-gold">
-          &quot;{page.content}&quot;
+          {page.content}
         </p>
         <div className="mt-8 flex flex-col items-center gap-2">
           <div className="w-32 h-[1px] bg-[#d4af37] opacity-60 rounded-full" />
@@ -378,63 +387,485 @@ function LocationPage() {
 
 function RSVPPage() {
   const [rsvpSent, setRsvpSent] = useState(false);
+  const [name, setName] = useState('');
+  const [ci, setCi] = useState('');
+  const [attending, setAttending] = useState<'si' | 'no'>('si');
+  const [diet, setDiet] = useState('');
+  const [song, setSong] = useState('');
+  const [phone, setPhone] = useState(INVITATION_DATA.whatsappNumber || '');
+  const [showPhoneEdit, setShowPhoneEdit] = useState(false);
 
-  const handleRSVP = (e: React.FormEvent) => {
+  // Photos & Anonymous Upload state
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+  const [previewUrls, setPreviewUrls] = useState<string[]>([]);
+  const [uploadedGallery, setUploadedGallery] = useState<string[]>([]);
+  const [activePhotoModal, setActivePhotoModal] = useState<string | null>(null);
+
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState('');
+  const [uploadSuccessMessage, setUploadSuccessMessage] = useState('');
+  const [uploadErrorMessage, setUploadErrorMessage] = useState('');
+
+  const [isSubmittingRsvp, setIsSubmittingRsvp] = useState(false);
+  const [rsvpError, setRsvpError] = useState('');
+  const [rsvpSavedToSupabase, setRsvpSavedToSupabase] = useState(false);
+
+  const handleRSVPSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setRsvpSent(true);
+    if (!name.trim()) return;
+
+    setIsSubmittingRsvp(true);
+    setRsvpError('');
+
+    try {
+      const res = await fetch('/api/rsvp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: name.trim(),
+          ci: ci.trim(),
+          attending,
+          diet: diet.trim(),
+          song: song.trim(),
+          phone: phone.trim()
+        })
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.error || 'No se pudo guardar la asistencia');
+      }
+
+      setRsvpSavedToSupabase(true);
+      setRsvpSent(true);
+    } catch (err: any) {
+      console.error('Error enviando RSVP:', err);
+      // If Supabase fail or missing, offer fallback to WhatsApp or display error
+      setRsvpError(err.message || 'Error al conectar con Supabase.');
+    } finally {
+      setIsSubmittingRsvp(false);
+    }
+  };
+
+  const handleOpenWhatsAppBackup = () => {
+    const cleanNum = phone.replace(/[^0-9]/g, '') || "59899000000";
+    const attendanceText = attending === 'si' ? '¡Sí, asistiré con mucho gusto! ✨' : 'Lamentablemente no podré asistir 💔';
+    const ciText = ci.trim() ? `\n• *C.I.:* ${ci.trim()}` : '';
+    const dietText = diet.trim() ? `\n• *Menú / Restricciones:* ${diet}` : '';
+    const songText = song.trim() ? `\n• *Canción recomendada:* ${song}` : '';
+
+    const message = `¡Hola ${INVITATION_DATA.name}! 🌹\n\nConfirmación de asistencia a tus XV Años:\n• *Nombre:* ${name}${ciText}\n• *Asistencia:* ${attendanceText}${dietText}${songText}\n\n¡Nos vemos pronto!`;
+
+    const whatsappUrl = `https://wa.me/${cleanNum}?text=${encodeURIComponent(message)}`;
+    window.open(whatsappUrl, '_blank');
+  };
+
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
+
+    const newFiles = Array.from(files);
+    setSelectedFiles((prev) => [...prev, ...newFiles]);
+
+    newFiles.forEach((file) => {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        if (event.target?.result) {
+          setPreviewUrls((prev) => [...prev, event.target!.result as string]);
+        }
+      };
+      reader.readAsDataURL(file);
+    });
+  };
+
+  const removePhoto = (indexToRemove: number) => {
+    setSelectedFiles((prev) => prev.filter((_, i) => i !== indexToRemove));
+    setPreviewUrls((prev) => prev.filter((_, i) => i !== indexToRemove));
+  };
+
+  const handleAnonymousUpload = async () => {
+    if (selectedFiles.length === 0) return;
+
+    setIsUploading(true);
+    setUploadSuccessMessage('');
+    setUploadErrorMessage('');
+    setUploadProgress(`Procesando ${selectedFiles.length} foto(s)...`);
+
+    try {
+      const formData = new FormData();
+      selectedFiles.forEach((f) => formData.append('file', f));
+
+      const res = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData,
+      });
+
+      const data = await res.json();
+
+      if (!res.ok || data.error) {
+        throw new Error(data.error || 'No se pudo completar la subida.');
+      }
+
+      const newUrls = data.urls || [];
+      setUploadedGallery((prev) => [...prev, ...newUrls]);
+      setUploadSuccessMessage(`¡${newUrls.length} foto(s) subida(s) con éxito al muro! ✨`);
+      setSelectedFiles([]);
+      setPreviewUrls([]);
+    } catch (err: any) {
+      console.error('Error al subir fotos:', err);
+      setUploadErrorMessage(err.message || 'Error al subir fotos. Intenta de nuevo.');
+    } finally {
+      setIsUploading(false);
+      setUploadProgress('');
+    }
+  };
+
+  const handleSharePhotosWhatsApp = () => {
+    const cleanNum = phone.replace(/[^0-9]/g, '') || "59899000000";
+    const totalCount = previewUrls.length + uploadedGallery.length;
+    const message = `¡Hola ${INVITATION_DATA.name}! 📸 Te comparto ${totalCount} foto(s) para el recuerdo de tus XV Años. ✨`;
+    const whatsappUrl = `https://wa.me/${cleanNum}?text=${encodeURIComponent(message)}`;
+    window.open(whatsappUrl, '_blank');
   };
 
   return (
-    <div className="w-full h-full p-6 sm:p-10 flex flex-col overflow-y-auto">
-      <div className="flex items-center gap-3 mb-6 justify-center">
+    <div className="w-full h-full p-4 sm:p-8 flex flex-col overflow-y-auto">
+      {/* Header */}
+      <div className="flex items-center gap-2 mb-4 justify-center">
         <Send className="w-5 h-5 text-[#c62828]" />
-        <h3 className="font-display text-xl text-[#d4af37] tracking-wider uppercase">Confirmar</h3>
+        <h3 className="font-display text-xl text-[#d4af37] tracking-wider uppercase">Confirmar Asistencia</h3>
       </div>
-      
+
+      {/* Supabase RSVP Form */}
       {rsvpSent ? (
         <motion.div 
           initial={{ scale: 0.9, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
-          className="flex-1 flex flex-col items-center justify-center text-center p-6 bg-[#d4af37]/5 rounded-xl border border-[#d4af37]/10"
+          className="p-5 bg-[#d4af37]/10 rounded-xl border border-[#d4af37]/30 text-center mb-6 shadow-sm flex flex-col items-center justify-center"
         >
-          <div className="w-14 h-14 bg-[#c62828] rounded-full flex items-center justify-center mb-4 shadow-lg">
-            <Heart className="w-6 h-6 text-[#fdfaf1] fill-current" />
+          <div className="w-12 h-12 bg-emerald-600 rounded-full flex items-center justify-center mb-3 shadow-md">
+            <CheckCircle2 className="w-7 h-7 text-white" />
           </div>
-          <p className="font-display text-base text-[#d4af37] mb-2 uppercase tracking-widest">¡Gracias!</p>
-          <p className="font-serif italic text-sm text-[#2c1810]/80">Será un honor tenerte en mi gran noche.</p>
+          <p className="font-display text-base text-[#d4af37] uppercase tracking-widest font-bold mb-1">
+            ¡Asistencia Confirmada!
+          </p>
+          <p className="font-serif italic text-xs text-[#2c1810]/80 mb-4 max-w-xs">
+            {rsvpSavedToSupabase 
+              ? 'Tu confirmación se guardó con éxito. ¡Gracias por avisarnos!'
+              : 'Se envió tu confirmación.'}
+          </p>
+          <div className="flex flex-wrap gap-2 justify-center">
+            <button
+              onClick={handleOpenWhatsAppBackup}
+              className="px-4 py-2 bg-[#25D366] hover:bg-[#20ba5a] text-white text-xs font-display tracking-wider rounded-md flex items-center gap-2 shadow transition-all font-semibold"
+            >
+              <MessageCircle className="w-4 h-4 fill-current" /> Enviar copia por WhatsApp
+            </button>
+            <button
+              onClick={() => {
+                setRsvpSent(false);
+                setRsvpSavedToSupabase(false);
+              }}
+              className="px-4 py-2 bg-[#2c1810]/10 hover:bg-[#2c1810]/20 text-[#2c1810] text-xs font-display tracking-wider rounded-md transition-colors"
+            >
+              Editar respuesta
+            </button>
+          </div>
         </motion.div>
       ) : (
-        <form onSubmit={handleRSVP} className="space-y-4">
+        <form onSubmit={handleRSVPSubmit} className="space-y-3 mb-6 bg-white/40 p-4 rounded-xl border border-[#d4af37]/20 shadow-sm">
+          {/* Asistencia Toggle */}
           <div>
-            <label className="block font-display text-[10px] text-[#d4af37] uppercase tracking-widest mb-1">Nombre Completo</label>
-            <input required className="w-full bg-white/50 border border-[#d4af37]/20 rounded-md p-2 focus:outline-none focus:border-[#d4af37] font-serif text-sm" />
+            <label className="block font-display text-[10px] text-[#d4af37] uppercase tracking-widest mb-1 font-semibold">
+              ¿Nos acompañas?
+            </label>
+            <div className="grid grid-cols-2 gap-2">
+              <button
+                type="button"
+                onClick={() => setAttending('si')}
+                className={`py-2 px-3 rounded-md text-xs font-display tracking-wider border transition-all flex items-center justify-center gap-1.5 ${
+                  attending === 'si'
+                    ? 'bg-[#2c1810] text-[#FFCE59] border-[#d4af37] shadow-sm font-bold'
+                    : 'bg-white/60 text-[#2c1810]/70 border-[#d4af37]/20 hover:bg-white'
+                }`}
+              >
+                <Heart className={`w-3.5 h-3.5 ${attending === 'si' ? 'fill-current text-[#EF584F]' : ''}`} />
+                ¡Sí, asistiré!
+              </button>
+              <button
+                type="button"
+                onClick={() => setAttending('no')}
+                className={`py-2 px-3 rounded-md text-xs font-display tracking-wider border transition-all flex items-center justify-center gap-1.5 ${
+                  attending === 'no'
+                    ? 'bg-[#2c1810] text-[#FFCE59] border-[#d4af37] shadow-sm font-bold'
+                    : 'bg-white/60 text-[#2c1810]/70 border-[#d4af37]/20 hover:bg-white'
+                }`}
+              >
+                No podré ir
+              </button>
+            </div>
           </div>
+
+          {/* Nombre Completo */}
           <div>
-            <label className="block font-display text-[10px] text-[#d4af37] uppercase tracking-widest mb-1">¿Restricción alimentaria?</label>
-            <input className="w-full bg-white/50 border border-[#d4af37]/20 rounded-md p-2 focus:outline-none focus:border-[#d4af37] font-serif text-sm" placeholder="Opcional" />
+            <label className="block font-display text-[10px] text-[#d4af37] uppercase tracking-widest mb-1 font-semibold">
+              Nombre Completo *
+            </label>
+            <input 
+              required 
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="Ej: Sofía y Familia"
+              className="w-full bg-white/80 border border-[#d4af37]/30 rounded-md p-2 focus:outline-none focus:border-[#d4af37] font-serif text-xs sm:text-sm text-[#2c1810]" 
+            />
           </div>
+
+          {/* C.I. / Cédula de Identidad */}
+          <div>
+            <label className="block font-display text-[10px] text-[#d4af37] uppercase tracking-widest mb-1 font-semibold flex items-center gap-1">
+              <CreditCard className="w-3 h-3 text-[#c62828]" /> Cédula de Identidad (C.I.)
+            </label>
+            <input 
+              value={ci}
+              onChange={(e) => setCi(e.target.value)}
+              placeholder="Ej: 1.234.567-8"
+              className="w-full bg-white/80 border border-[#d4af37]/30 rounded-md p-2 focus:outline-none focus:border-[#d4af37] font-serif text-xs text-[#2c1810]" 
+            />
+          </div>
+
+          {/* Menú / Restricción Alimentaria */}
+          <div>
+            <label className="block font-display text-[10px] text-[#d4af37] uppercase tracking-widest mb-1 font-semibold flex items-center gap-1">
+              <Utensils className="w-3 h-3 text-[#c62828]" /> Restricción Alimentaria / Menú
+            </label>
+            <input 
+              value={diet}
+              onChange={(e) => setDiet(e.target.value)}
+              placeholder="Ej: Vegetariano, Celíaco, Ninguno"
+              className="w-full bg-white/80 border border-[#d4af37]/30 rounded-md p-2 focus:outline-none focus:border-[#d4af37] font-serif text-xs text-[#2c1810]" 
+            />
+          </div>
+
+          {/* Canción sugerida */}
+          <div>
+            <label className="block font-display text-[10px] text-[#d4af37] uppercase tracking-widest mb-1 font-semibold flex items-center gap-1">
+              <Music className="w-3 h-3 text-[#c62828]" /> Canción infaltable para el DJ
+            </label>
+            <input 
+              value={song}
+              onChange={(e) => setSong(e.target.value)}
+              placeholder="Ej: Taylor Swift - Cruel Summer"
+              className="w-full bg-white/80 border border-[#d4af37]/30 rounded-md p-2 focus:outline-none focus:border-[#d4af37] font-serif text-xs text-[#2c1810]" 
+            />
+          </div>
+
+          {/* Error Banner */}
+          {rsvpError && (
+            <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-center space-y-2">
+              <p className="text-xs text-red-800 font-serif">{rsvpError}</p>
+              <button
+                type="button"
+                onClick={handleOpenWhatsAppBackup}
+                className="w-full py-1.5 px-3 bg-[#25D366] text-white text-[11px] font-display uppercase tracking-wider rounded flex items-center justify-center gap-1 font-bold"
+              >
+                <MessageCircle className="w-3.5 h-3.5 fill-current" /> Confirmar por WhatsApp en su lugar
+              </button>
+            </div>
+          )}
+
+          {/* Submit Button */}
           <button 
             type="submit"
-            className="w-full py-4 bg-[#c62828] text-[#fdfaf1] font-display text-sm tracking-[0.2em] rounded-md hover:bg-[#a51a1a] transition-all transform hover:translate-y-[-2px] active:translate-y-0 shadow-lg mt-2"
+            disabled={isSubmittingRsvp}
+            className="w-full py-3 bg-[#c62828] hover:bg-[#a51a1a] disabled:opacity-50 text-white font-display text-xs tracking-[0.15em] uppercase rounded-md shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2 transform active:scale-95 font-bold mt-2"
           >
-            CONFIRMAR ASISTENCIA
+            {isSubmittingRsvp ? (
+              <>
+                <Loader2 className="w-4 h-4 animate-spin" />
+                <span>Confirmando asistencia...</span>
+              </>
+            ) : (
+              <>
+                <Send className="w-4 h-4" />
+                <span>CONFIRMAR ASISTENCIA</span>
+              </>
+            )}
           </button>
         </form>
       )}
 
-      <div className="mt-8 pt-6 border-t border-[#d4af37]/10">
-        <div className="flex items-center gap-3 mb-4 justify-center">
+
+      {/* Section B: Anonymous Photo Uploader & Live Memory Wall */}
+      <div className="mt-2 pt-4 border-t border-[#d4af37]/20">
+        <div className="flex items-center justify-between mb-3">
+          <div className="flex items-center gap-2">
             <Camera className="w-4 h-4 text-[#c62828]" />
-          <p className="font-display text-[10px] text-[#d4af37] uppercase tracking-widest">Sube tus recuerdos</p>
-        </div>
-        <label className="flex flex-col items-center justify-center w-full h-24 border-2 border-dashed border-[#d4af37]/20 rounded-lg cursor-pointer hover:bg-[#d4af37]/5 transition-colors">
-          <div className="flex flex-col items-center justify-center text-center px-4">
-            <p className="text-[10px] text-[#2c1810]/60 italic font-serif">Ayúdame a guardar la magia de esta noche</p>
-            <p className="text-[9px] text-[#d4af37] uppercase mt-1 tracking-widest font-display">Toca para subir fotos</p>
+            <p className="font-display text-xs text-[#d4af37] uppercase tracking-widest font-semibold">
+              Muro de Recuerdos
+            </p>
           </div>
-          <input type="file" className="hidden" multiple accept="image/*" />
+          {(previewUrls.length > 0 || uploadedGallery.length > 0) && (
+            <span className="text-[10px] font-display text-[#2c1810]/70 bg-[#d4af37]/20 px-2 py-0.5 rounded-full">
+              {uploadedGallery.length + previewUrls.length} {uploadedGallery.length + previewUrls.length === 1 ? 'foto' : 'fotos'}
+            </span>
+          )}
+        </div>
+
+        {/* Upload Box */}
+        <label className="flex flex-col items-center justify-center w-full p-4 border-2 border-dashed border-[#d4af37]/40 rounded-xl cursor-pointer bg-white/40 hover:bg-[#d4af37]/10 transition-colors text-center group">
+          <Upload className="w-5 h-5 text-[#d4af37] mb-1 group-hover:scale-110 transition-transform" />
+          <p className="text-xs text-[#2c1810] font-serif italic">Seleccionar fotos de la fiesta o recuerdos</p>
+          <p className="text-[9px] text-[#d4af37] uppercase mt-0.5 tracking-widest font-display font-bold">
+            Toca aquí para elegir fotos
+          </p>
+          <input 
+            type="file" 
+            className="hidden" 
+            multiple 
+            accept="image/*" 
+            onChange={handleFileSelect} 
+          />
         </label>
+
+        {/* Selected Preview Grid & Upload Action */}
+        {previewUrls.length > 0 && (
+          <div className="mt-4 space-y-3">
+            <p className="text-[10px] font-display uppercase tracking-wider text-[#d4af37] font-semibold">
+              Fotos seleccionadas ({previewUrls.length}):
+            </p>
+            <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
+              {previewUrls.map((src, idx) => (
+                <div 
+                  key={idx} 
+                  className="relative aspect-square rounded-lg overflow-hidden border border-[#d4af37]/40 group shadow-sm bg-black/5"
+                >
+                  <img 
+                    src={src} 
+                    alt={`Foto ${idx + 1}`} 
+                    className="w-full h-full object-cover cursor-pointer group-hover:scale-105 transition-transform"
+                    onClick={() => setActivePhotoModal(src)}
+                  />
+                  <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-1.5">
+                    <button 
+                      type="button"
+                      onClick={() => setActivePhotoModal(src)}
+                      className="p-1 bg-white/80 rounded-full text-[#2c1810] hover:bg-white"
+                      title="Ver pantalla completa"
+                    >
+                      <Maximize2 className="w-3 h-3" />
+                    </button>
+                    <button 
+                      type="button"
+                      onClick={() => removePhoto(idx)}
+                      className="p-1 bg-red-600/80 rounded-full text-white hover:bg-red-600"
+                      title="Eliminar"
+                    >
+                      <Trash2 className="w-3 h-3" />
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Direct Upload Button */}
+            <div className="flex flex-col gap-2 pt-1">
+              <button
+                type="button"
+                onClick={handleAnonymousUpload}
+                disabled={isUploading}
+                className="w-full py-2.5 px-3 bg-[#c62828] hover:bg-[#a51a1a] disabled:opacity-50 text-white text-xs font-display uppercase tracking-wider rounded-md flex items-center justify-center gap-2 transition-all shadow-md font-bold transform active:scale-95"
+              >
+                {isUploading ? (
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                    <span>Subiendo fotos...</span>
+                  </>
+                ) : (
+                  <>
+                    <CloudUpload className="w-4 h-4" />
+                    <span>Subir {selectedFiles.length} foto(s) al muro ahora</span>
+                  </>
+                )}
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Uploaded Gallery Wall */}
+        {uploadedGallery.length > 0 && (
+          <div className="mt-4 pt-3 border-t border-[#d4af37]/20 space-y-2">
+            <p className="text-[10px] font-display uppercase tracking-widest text-[#2c1810] font-bold flex items-center gap-1">
+              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+              Fotos Subidas al Muro ({uploadedGallery.length}):
+            </p>
+            <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
+              {uploadedGallery.map((url, idx) => (
+                <div 
+                  key={idx} 
+                  className="relative aspect-square rounded-lg overflow-hidden border-2 border-[#d4af37] shadow-md group cursor-pointer"
+                  onClick={() => setActivePhotoModal(url)}
+                >
+                  <img src={url} alt={`Foto subida ${idx + 1}`} className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
+                  <div className="absolute top-1 right-1 bg-emerald-600 text-white p-0.5 rounded-full shadow">
+                    <Check className="w-2.5 h-2.5" />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Upload Progress & Messages */}
+        {uploadProgress && (
+          <div className="mt-3 p-3 bg-amber-50 border border-amber-200 rounded-lg text-center flex items-center justify-center gap-2">
+            <Loader2 className="w-4 h-4 text-[#d4af37] animate-spin" />
+            <p className="text-xs font-mono text-[#2c1810]">{uploadProgress}</p>
+          </div>
+        )}
+
+        {uploadSuccessMessage && (
+          <div className="mt-3 p-3 bg-emerald-50 border border-emerald-200 rounded-lg text-center">
+            <p className="text-xs font-display text-emerald-800 font-bold">
+              {uploadSuccessMessage}
+            </p>
+          </div>
+        )}
+
+        {uploadErrorMessage && (
+          <div className="mt-3 p-3 bg-red-50 border border-red-200 rounded-lg text-center">
+            <p className="text-xs font-display text-red-800">{uploadErrorMessage}</p>
+          </div>
+        )}
       </div>
+
+      {/* Lightbox Modal */}
+      <AnimatePresence>
+        {activePhotoModal && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-4 backdrop-blur-sm"
+            onClick={() => setActivePhotoModal(null)}
+          >
+            <div className="relative max-w-xl max-h-[85vh] w-full h-full flex items-center justify-center" onClick={(e) => e.stopPropagation()}>
+              <img 
+                src={activePhotoModal} 
+                alt="Foto ampliada" 
+                className="max-w-full max-h-full object-contain rounded-lg border border-[#d4af37]/40 shadow-2xl" 
+              />
+              <button
+                type="button"
+                onClick={() => setActivePhotoModal(null)}
+                className="absolute top-2 right-2 p-2 bg-black/60 text-white rounded-full hover:bg-black/80 transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
@@ -466,10 +897,6 @@ function GiftPage() {
             {d.giftRegistry.bankDetails}
           </p>
         </div>
-        
-        <p className="text-[10px] uppercase tracking-[0.2em] text-[#c62828] italic font-semibold pt-4">
-           #BellezaYMagia ✨
-        </p>
       </div>
     </div>
   );
@@ -482,6 +909,7 @@ function TeEsperoPage({ page }: { page: any }) {
         src={page.image} 
         alt={page.title} 
         fill 
+        unoptimized
         className="object-cover" 
         referrerPolicy="no-referrer"
       />
@@ -503,19 +931,21 @@ function TeEsperoPage({ page }: { page: any }) {
           transition={{ duration: 0.6 }}
           className="mb-4"
         >
-          <Rose className="w-12 h-12 sm:w-16 sm:h-16 text-[#EF584F] drop-shadow-[0_0_15px_rgba(239,88,79,0.7)] animate-pulse mx-auto" />
+          <Rose className="w-14 h-14 sm:w-18 sm:h-18 text-[#EF584F] drop-shadow-[0_0_15px_rgba(239,88,79,0.7)] animate-pulse mx-auto" />
         </motion.div>
 
-        <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl text-[#FFCE59] tracking-widest uppercase mb-4 drop-shadow-[0_4px_25px_rgba(255,206,89,0.7)] font-bold">
-          {page.title}
+        <h2 className="font-display text-4xl sm:text-5xl text-[#FFCE59] tracking-widest uppercase mb-6 text-shadow-gold">
+          {page.title || "¡TE ESPERO!"}
         </h2>
 
-        <p className="font-serif text-base sm:text-xl leading-relaxed text-[#fdfaf1] italic max-w-xs text-shadow-gold mb-6">
-          &quot;{page.content}&quot;
-        </p>
+        {page.content ? (
+          <p className="font-serif text-base sm:text-xl leading-relaxed text-[#fdfaf1] italic max-w-xs text-shadow-gold mb-6">
+            {page.content}
+          </p>
+        ) : null}
 
-        <div className="inline-block px-4 py-2 bg-[#d4af37]/15 rounded-full border border-[#d4af37]/40 backdrop-blur-sm">
-          <p className="font-display text-xs sm:text-sm text-[#FFCE59] tracking-[0.2em] uppercase font-bold">
+        <div className="inline-block px-5 py-2.5 bg-[#d4af37]/15 rounded-full border border-[#d4af37]/40 backdrop-blur-sm shadow-lg">
+          <p className="font-display text-sm sm:text-base text-[#FFCE59] tracking-[0.25em] uppercase font-bold">
             19 • SEPTIEMBRE • 2026
           </p>
         </div>
@@ -524,9 +954,6 @@ function TeEsperoPage({ page }: { page: any }) {
       {/* Decorative Bottom */}
       <div className="relative z-10 pb-12 sm:pb-8 flex flex-col items-center gap-2">
         <div className="w-16 h-[1px] bg-[#d4af37]/40" />
-        <p className="font-display text-[9px] text-[#d4af37]/80 tracking-[0.3em] uppercase">
-          #BellezaYMagia ✨
-        </p>
       </div>
     </div>
   );

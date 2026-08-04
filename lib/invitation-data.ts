@@ -2,6 +2,16 @@ export const INVITATION_DATA = {
   name: "Emilia Tomas",
   date: "19 de Septiembre, 2026",
   time: "21:00 hs",
+  whatsappNumber: "+59899123456", // Cambia esto por el número de WhatsApp de Emilia / Organizador
+  cloudinary: {
+    cloudName: "qbnzhyou", // Ej: "tu_cloud_name" de Cloudinary
+    uploadPreset: "event_photos" // Ej: "xv_emilia" (Unsigned upload preset)
+  },
+  supabase: {
+    url: "https://jglmccbkvmzqxbehkkef.supabase.co", // Reemplazar con tu URL de Supabase (ej: https://xyz.supabase.co)
+    anonKey: "sb_publishable_gQSharkixPxjBqsDC6YSWQ_ERTaK59o" // Reemplazar con tu Anon Key de Supabase
+  },
+  driveAlbumUrl: "", // Opcional: Link a álbum compartido de Google Photos o Drive
   location: {
     name: "Chacra las calas",
     address: "Cam. Altair, 12400 Montevideo, Uruguay",
@@ -15,8 +25,8 @@ export const INVITATION_DATA = {
   pages: [
     {
       title: "La Rosa Encantada",
-      content: "Un sueño que comenzó hace 15 años y que hoy se hace realidad bajo la luz de una rosa mágica.",
-      image: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&q=80&w=800&h=1200"
+      content: '"Érase una vez una tierra lejana"... una joven festejaba sus XV años, una noche que quedará para siempre en su corazón',
+      image: "/images/NAC02340-1.png"
     },
     {
       title: "Cuándo y Qué vestir",
@@ -24,8 +34,8 @@ export const INVITATION_DATA = {
     },
     {
       title: "Mis Recuerdos",
-      content: "Cada segundo vivido me trajo hasta aquí, lista para empezar el capítulo más hermoso.",
-      image: "https://images.unsplash.com/photo-1566174053879-31528523f8ae?auto=format&fit=crop&q=80&w=800&h=1200"
+      content: "Te invito a compartir este festejo donde los sueños y el amor por los momentos especiales se hacen realidad.",
+      image: "/images/NAC02484.png"
     },
     {
       title: "Dónde es la magia",
@@ -33,8 +43,8 @@ export const INVITATION_DATA = {
     },
     {
       title: "El Gran Baile",
-      content: "Te espero para compartir una noche inolvidable en nuestro castillo encantado.",
-      image: "https://images.unsplash.com/photo-1519167758481-83f550bb49b3?auto=format&fit=crop&q=80&w=800&h=1200"
+      content: "Inspirada en un cuento que nos enseñó a descubrir la belleza en los pequeños detalles, soñé con una fiesta llena de rosas, música y una tiara",
+      image: "/images/NAC03363.png"
     },
     {
       title: "Confirmar Asistencia",
@@ -42,13 +52,8 @@ export const INVITATION_DATA = {
     },
     {
       title: "Dulces 15",
-      content: "Quince años guardando sonrisas, coleccionando momentos y soñando con los ojos abiertos.",
-      image: "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&q=80&w=800&h=1200"
-    },
-    {
-      title: "Noche de Magia",
-      content: "Una velada pensada para brindar, bailar y reír rodeada de las personas que más quiero.",
-      image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=800&h=1200"
+      content: "Solo falta un detalle para completar este cuento, que estés allí. Te espero para compartir mi noche soñada",
+      image: "/images/NAC03414.png"
     },
     {
       title: "Un Detalle",
@@ -56,8 +61,8 @@ export const INVITATION_DATA = {
     },
     {
       title: "¡TE ESPERO!",
-      content: "Para compartir juntos la noche más mágica e inolvidable de mi vida.",
-      image: "https://images.unsplash.com/photo-1527529482837-4698179dc6ce?auto=format&fit=crop&q=80&w=800&h=1200",
+      content: "",
+      image: "/images/NAC04019.png",
       type: "teespero"
     }
   ]

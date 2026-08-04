@@ -10,7 +10,7 @@ export default function Home() {
 
   return (
     <main className="min-h-screen relative bg-[#2c1810]">
-      <AnimatePresence mode="wait">
+      <AnimatePresence>
         {!showInvitation ? (
           <InvitationEnvelope key="envelope" onOpen={() => setShowInvitation(true)} />
         ) : (
@@ -18,7 +18,7 @@ export default function Home() {
             key="invitation"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 1 }}
+            transition={{ duration: 0.5 }}
             className="w-full"
           >
             {/* Background elements (Beauty and the Beast theme) */}
