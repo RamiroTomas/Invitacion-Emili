@@ -26,7 +26,7 @@ export const INVITATION_DATA = {
     {
       title: "La Rosa Encantada",
       content: '"Érase una vez una tierra lejana"... una joven festejaba sus XV años, una noche que quedaría para siempre en su corazón',
-      image: "/images/NAC02340-1.jpg"
+      image: "/images/NAC02340.jpg"
     },
     {
       title: "Mis Recuerdos",
