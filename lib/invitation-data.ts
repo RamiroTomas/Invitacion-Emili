@@ -1,7 +1,7 @@
 export const INVITATION_DATA = {
   name: "Emilia Tomas",
   date: "19 de Septiembre, 2026",
-  time: "de 21 a 5 hrs, se ruega puntualidad",
+  time: "de 21 a 5 hrs",
   whatsappNumber: "+59899123456", // Cambia esto por el número de WhatsApp de Emilia / Organizador
   cloudinary: {
     cloudName: "qbnzhyou", // Ej: "tu_cloud_name" de Cloudinary
