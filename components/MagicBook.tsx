@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { ChevronRight, ChevronLeft, MapPin, Calendar, Clock, Shirt, Gift, Camera, Send, Heart, MessageCircle, CheckCircle2, Music, Utensils, X, Maximize2, ExternalLink, Share2, Trash2, Phone, Upload, Loader2, Check, CloudUpload, LogOut, CreditCard, Image as ImageIcon } from 'lucide-react';
 import { initAuth, googleSignIn, logout, uploadFileToDrive, getOrCreateDriveFolder } from '@/lib/firebase-auth';
@@ -38,7 +38,48 @@ import Image from 'next/image';
 export default function MagicBook({ adolescentMode = false }: { adolescentMode?: boolean }) {
   const [currentPage, setCurrentPage] = useState(0);
   const [direction, setDirection] = useState(0); // 1 for forward, -1 for backward
+  const [isMusicPlaying, setIsMusicPlaying] = useState(true);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
   const totalPages = INVITATION_DATA.pages.length;
+
+  useEffect(() => {
+    const audio = new Audio('/images/audio.mp3.mp3');
+    audio.loop = true;
+    audio.volume = 0.25;
+    audioRef.current = audio;
+
+    const tryPlay = async () => {
+      if (audioRef.current && isMusicPlaying) {
+        try {
+          await audioRef.current.play();
+        } catch {
+          // Autoplay may be blocked until user interacts with the page.
+        }
+      }
+    };
+
+    tryPlay();
+
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current = null;
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!audioRef.current) return;
+    if (isMusicPlaying) {
+      audioRef.current.play().catch(() => {});
+    } else {
+      audioRef.current.pause();
+    }
+  }, [isMusicPlaying]);
+
+  const toggleMusic = () => {
+    setIsMusicPlaying((prev) => !prev);
+  };
 
   const playPageTurnSound = () => {
     // Play a subtle page turn sound
@@ -112,6 +153,14 @@ export default function MagicBook({ adolescentMode = false }: { adolescentMode?:
 
   return (
     <div className="min-h-screen bg-[#2c1810] flex flex-col items-center justify-center p-4 sm:p-8 overflow-hidden perspective-2000 relative select-none">
+      <button
+        type="button"
+        onClick={toggleMusic}
+        className="fixed top-4 right-4 z-50 flex items-center gap-2 rounded-full border border-[#d4af37]/40 bg-[#2c1810]/90 px-3 py-2 text-xs font-display uppercase tracking-[0.2em] text-[#fdfaf1] shadow-lg shadow-black/50 backdrop-blur-md hover:bg-[#2c1810]"
+      >
+        <Music className="w-4 h-4 text-[#d4af37]" />
+        {isMusicPlaying ? 'Pausa' : 'Play'}
+      </button>
       {/* Subtle particle effect or roses in background */}
       <div className="absolute inset-0 opacity-10 pointer-events-none overflow-hidden">
         <div className="absolute top-10 left-10"><Rose className="w-20 h-20 text-[#c62828] blur-sm" /></div>
