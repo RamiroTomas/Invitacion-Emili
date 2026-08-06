@@ -273,7 +273,12 @@ function StandardPage({ page, isPriority }: { page: any, isPriority?: boolean })
         className="object-cover" 
         referrerPolicy="no-referrer"
       />
-      <div className="absolute inset-0 bg-gradient-to-t from-[#2c1810]/98 via-[#2c1810]/70 to-transparent" />
+      <div
+        className="absolute inset-0"
+        style={{
+          background: 'linear-gradient(to top, rgba(44,24,16,0.85) 0%, rgba(44,24,16,0.65) 25%, rgba(44,24,16,0.35) 40%, transparent 100%)'
+        }}
+      />
       <div className="absolute inset-x-0 bottom-0 px-6 sm:px-12 pb-12 sm:pb-16 flex flex-col justify-end text-center z-10">
         <p className="font-serif text-base sm:text-xl leading-relaxed text-[#fdfaf1] italic text-shadow-gold max-w-sm sm:max-w-md mx-auto">
           {page.content}
@@ -866,11 +871,16 @@ function TeEsperoPage({ page }: { page: any }) {
         className="object-cover" 
         referrerPolicy="no-referrer"
       />
-      <div className="absolute inset-0 bg-gradient-to-t from-[#2c1810] via-[#2c1810]/75 to-[#2c1810]/50 z-0" />
+      <div
+        className="absolute inset-0 z-0"
+        style={{
+          background: 'linear-gradient(to top, rgba(44,24,16,0.85) 0%, rgba(44,24,16,0.65) 25%, rgba(44,24,16,0.35) 40%, transparent 100%)'
+        }}
+      />
 
       {/* Decorative Top Accent */}
       <div className="relative z-10 pt-4 flex flex-col items-center gap-2">
-        <p className="font-display text-[10px] sm:text-xs text-[#d4af37] tracking-[0.35em] uppercase font-semibold">
+        <p className="font-display text-[10px] sm:text-xs text-[#d4af37] tracking-[0.35em] uppercase font-semibold text-shadow-gold">
           {INVITATION_DATA.name} • XV AÑOS
         </p>
         <div className="w-24 h-[1px] bg-[#d4af37]/60" />
@@ -898,7 +908,7 @@ function TeEsperoPage({ page }: { page: any }) {
         ) : null}
 
         <div className="inline-block px-5 py-2.5 bg-[#d4af37]/15 rounded-full border border-[#d4af37]/40 backdrop-blur-sm shadow-lg">
-          <p className="font-display text-sm sm:text-base text-[#FFCE59] tracking-[0.25em] uppercase font-bold">
+          <p className="font-display text-sm sm:text-base text-[#FFCE59] tracking-[0.25em] uppercase font-bold text-shadow-gold">
             19 • SEPTIEMBRE • 2026
           </p>
         </div>
