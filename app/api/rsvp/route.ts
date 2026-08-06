@@ -32,7 +32,7 @@ function getSupabaseConfig() {
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { name, ci, attending, diet, song, phone } = body;
+    const { name, ci, attending, diet, song, phone, adultResponsiblePhone } = body;
 
     if (!name || !name.trim()) {
       return NextResponse.json({ error: 'El nombre es obligatorio' }, { status: 400 });
@@ -57,6 +57,7 @@ export async function POST(req: NextRequest) {
       diet: diet ? diet.trim() : null,
       song: song ? song.trim() : null,
       phone: phone ? phone.trim() : null,
+      adultResponsiblePhone: adultResponsiblePhone ? adultResponsiblePhone.trim() : null,
       created_at: new Date().toISOString()
     };
 
@@ -79,9 +80,10 @@ export async function POST(req: NextRequest) {
       console.error('Error enviando a Supabase REST:', response.status, errText);
 
       // Retry without 'ci' if column missing
-      if (errText.includes('ci')) {
+      if (errText.includes('ci') || errText.includes('adultResponsiblePhone') || errText.includes('adult_responsible_phone')) {
         const payloadNoCi = { ...payload };
         delete (payloadNoCi as any).ci;
+        delete (payloadNoCi as any).adultResponsiblePhone;
         payloadNoCi.name = `${name.trim()} (C.I: ${ci ? ci.trim() : ''})`;
 
         const retryRes = await fetch(endpoint, {

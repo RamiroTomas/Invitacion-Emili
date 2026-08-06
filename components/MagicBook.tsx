@@ -393,18 +393,9 @@ function RSVPPage() {
   const [diet, setDiet] = useState('');
   const [song, setSong] = useState('');
   const [phone, setPhone] = useState(INVITATION_DATA.whatsappNumber || '');
+  const [adultResponsiblePhone, setAdultResponsiblePhone] = useState('');
   const [showPhoneEdit, setShowPhoneEdit] = useState(false);
-
-  // Photos & Anonymous Upload state
-  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
-  const [previewUrls, setPreviewUrls] = useState<string[]>([]);
-  const [uploadedGallery, setUploadedGallery] = useState<string[]>([]);
   const [activePhotoModal, setActivePhotoModal] = useState<string | null>(null);
-
-  const [isUploading, setIsUploading] = useState(false);
-  const [uploadProgress, setUploadProgress] = useState('');
-  const [uploadSuccessMessage, setUploadSuccessMessage] = useState('');
-  const [uploadErrorMessage, setUploadErrorMessage] = useState('');
 
   const [isSubmittingRsvp, setIsSubmittingRsvp] = useState(false);
   const [rsvpError, setRsvpError] = useState('');
@@ -427,7 +418,8 @@ function RSVPPage() {
           attending,
           diet: diet.trim(),
           song: song.trim(),
-          phone: phone.trim()
+          phone: phone.trim(),
+          adultResponsiblePhone: adultResponsiblePhone.trim()
         })
       });
 
@@ -457,74 +449,6 @@ function RSVPPage() {
 
     const message = `¡Hola ${INVITATION_DATA.name}! 🌹\n\nConfirmación de asistencia a tus XV Años:\n• *Nombre:* ${name}${ciText}\n• *Asistencia:* ${attendanceText}${dietText}${songText}\n\n¡Nos vemos pronto!`;
 
-    const whatsappUrl = `https://wa.me/${cleanNum}?text=${encodeURIComponent(message)}`;
-    window.open(whatsappUrl, '_blank');
-  };
-
-  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files;
-    if (!files || files.length === 0) return;
-
-    const newFiles = Array.from(files);
-    setSelectedFiles((prev) => [...prev, ...newFiles]);
-
-    newFiles.forEach((file) => {
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        if (event.target?.result) {
-          setPreviewUrls((prev) => [...prev, event.target!.result as string]);
-        }
-      };
-      reader.readAsDataURL(file);
-    });
-  };
-
-  const removePhoto = (indexToRemove: number) => {
-    setSelectedFiles((prev) => prev.filter((_, i) => i !== indexToRemove));
-    setPreviewUrls((prev) => prev.filter((_, i) => i !== indexToRemove));
-  };
-
-  const handleAnonymousUpload = async () => {
-    if (selectedFiles.length === 0) return;
-
-    setIsUploading(true);
-    setUploadSuccessMessage('');
-    setUploadErrorMessage('');
-    setUploadProgress(`Procesando ${selectedFiles.length} foto(s)...`);
-
-    try {
-      const formData = new FormData();
-      selectedFiles.forEach((f) => formData.append('file', f));
-
-      const res = await fetch('/api/upload', {
-        method: 'POST',
-        body: formData,
-      });
-
-      const data = await res.json();
-
-      if (!res.ok || data.error) {
-        throw new Error(data.error || 'No se pudo completar la subida.');
-      }
-
-      const newUrls = data.urls || [];
-      setUploadedGallery((prev) => [...prev, ...newUrls]);
-      setUploadSuccessMessage(`¡${newUrls.length} foto(s) subida(s) con éxito al muro! ✨`);
-      setSelectedFiles([]);
-      setPreviewUrls([]);
-    } catch (err: any) {
-      console.error('Error al subir fotos:', err);
-      setUploadErrorMessage(err.message || 'Error al subir fotos. Intenta de nuevo.');
-    } finally {
-      setIsUploading(false);
-      setUploadProgress('');
-    }
-  };
-
-  const handleSharePhotosWhatsApp = () => {
-    const cleanNum = phone.replace(/[^0-9]/g, '') || "59899000000";
-    const totalCount = previewUrls.length + uploadedGallery.length;
-    const message = `¡Hola ${INVITATION_DATA.name}! 📸 Te comparto ${totalCount} foto(s) para el recuerdo de tus XV Años. ✨`;
     const whatsappUrl = `https://wa.me/${cleanNum}?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
   };
@@ -695,150 +619,6 @@ function RSVPPage() {
         </form>
       )}
 
-
-      {/* Section B: Anonymous Photo Uploader & Live Memory Wall */}
-      <div className="mt-2 pt-4 border-t border-[#d4af37]/20">
-        <div className="flex items-center justify-between mb-3">
-          <div className="flex items-center gap-2">
-            <Camera className="w-4 h-4 text-[#c62828]" />
-            <p className="font-display text-xs text-[#d4af37] uppercase tracking-widest font-semibold">
-              Muro de Recuerdos
-            </p>
-          </div>
-          {(previewUrls.length > 0 || uploadedGallery.length > 0) && (
-            <span className="text-[10px] font-display text-[#2c1810]/70 bg-[#d4af37]/20 px-2 py-0.5 rounded-full">
-              {uploadedGallery.length + previewUrls.length} {uploadedGallery.length + previewUrls.length === 1 ? 'foto' : 'fotos'}
-            </span>
-          )}
-        </div>
-
-        {/* Upload Box */}
-        <label className="flex flex-col items-center justify-center w-full p-4 border-2 border-dashed border-[#d4af37]/40 rounded-xl cursor-pointer bg-white/40 hover:bg-[#d4af37]/10 transition-colors text-center group">
-          <Upload className="w-5 h-5 text-[#d4af37] mb-1 group-hover:scale-110 transition-transform" />
-          <p className="text-xs text-[#2c1810] font-serif italic">Seleccionar fotos de la fiesta o recuerdos</p>
-          <p className="text-[9px] text-[#d4af37] uppercase mt-0.5 tracking-widest font-display font-bold">
-            Toca aquí para elegir fotos
-          </p>
-          <input 
-            type="file" 
-            className="hidden" 
-            multiple 
-            accept="image/*" 
-            onChange={handleFileSelect} 
-          />
-        </label>
-
-        {/* Selected Preview Grid & Upload Action */}
-        {previewUrls.length > 0 && (
-          <div className="mt-4 space-y-3">
-            <p className="text-[10px] font-display uppercase tracking-wider text-[#d4af37] font-semibold">
-              Fotos seleccionadas ({previewUrls.length}):
-            </p>
-            <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
-              {previewUrls.map((src, idx) => (
-                <div 
-                  key={idx} 
-                  className="relative aspect-square rounded-lg overflow-hidden border border-[#d4af37]/40 group shadow-sm bg-black/5"
-                >
-                  <img 
-                    src={src} 
-                    alt={`Foto ${idx + 1}`} 
-                    className="w-full h-full object-cover cursor-pointer group-hover:scale-105 transition-transform"
-                    onClick={() => setActivePhotoModal(src)}
-                  />
-                  <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-1.5">
-                    <button 
-                      type="button"
-                      onClick={() => setActivePhotoModal(src)}
-                      className="p-1 bg-white/80 rounded-full text-[#2c1810] hover:bg-white"
-                      title="Ver pantalla completa"
-                    >
-                      <Maximize2 className="w-3 h-3" />
-                    </button>
-                    <button 
-                      type="button"
-                      onClick={() => removePhoto(idx)}
-                      className="p-1 bg-red-600/80 rounded-full text-white hover:bg-red-600"
-                      title="Eliminar"
-                    >
-                      <Trash2 className="w-3 h-3" />
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            {/* Direct Upload Button */}
-            <div className="flex flex-col gap-2 pt-1">
-              <button
-                type="button"
-                onClick={handleAnonymousUpload}
-                disabled={isUploading}
-                className="w-full py-2.5 px-3 bg-[#c62828] hover:bg-[#a51a1a] disabled:opacity-50 text-white text-xs font-display uppercase tracking-wider rounded-md flex items-center justify-center gap-2 transition-all shadow-md font-bold transform active:scale-95"
-              >
-                {isUploading ? (
-                  <>
-                    <Loader2 className="w-4 h-4 animate-spin" />
-                    <span>Subiendo fotos...</span>
-                  </>
-                ) : (
-                  <>
-                    <CloudUpload className="w-4 h-4" />
-                    <span>Subir {selectedFiles.length} foto(s) al muro ahora</span>
-                  </>
-                )}
-              </button>
-            </div>
-          </div>
-        )}
-
-        {/* Uploaded Gallery Wall */}
-        {uploadedGallery.length > 0 && (
-          <div className="mt-4 pt-3 border-t border-[#d4af37]/20 space-y-2">
-            <p className="text-[10px] font-display uppercase tracking-widest text-[#2c1810] font-bold flex items-center gap-1">
-              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
-              Fotos Subidas al Muro ({uploadedGallery.length}):
-            </p>
-            <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
-              {uploadedGallery.map((url, idx) => (
-                <div 
-                  key={idx} 
-                  className="relative aspect-square rounded-lg overflow-hidden border-2 border-[#d4af37] shadow-md group cursor-pointer"
-                  onClick={() => setActivePhotoModal(url)}
-                >
-                  <img src={url} alt={`Foto subida ${idx + 1}`} className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
-                  <div className="absolute top-1 right-1 bg-emerald-600 text-white p-0.5 rounded-full shadow">
-                    <Check className="w-2.5 h-2.5" />
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Upload Progress & Messages */}
-        {uploadProgress && (
-          <div className="mt-3 p-3 bg-amber-50 border border-amber-200 rounded-lg text-center flex items-center justify-center gap-2">
-            <Loader2 className="w-4 h-4 text-[#d4af37] animate-spin" />
-            <p className="text-xs font-mono text-[#2c1810]">{uploadProgress}</p>
-          </div>
-        )}
-
-        {uploadSuccessMessage && (
-          <div className="mt-3 p-3 bg-emerald-50 border border-emerald-200 rounded-lg text-center">
-            <p className="text-xs font-display text-emerald-800 font-bold">
-              {uploadSuccessMessage}
-            </p>
-          </div>
-        )}
-
-        {uploadErrorMessage && (
-          <div className="mt-3 p-3 bg-red-50 border border-red-200 rounded-lg text-center">
-            <p className="text-xs font-display text-red-800">{uploadErrorMessage}</p>
-          </div>
-        )}
-      </div>
-
       {/* Lightbox Modal */}
       <AnimatePresence>
         {activePhotoModal && (
@@ -866,6 +646,174 @@ function RSVPPage() {
           </motion.div>
         )}
       </AnimatePresence>
+    </div>
+  );
+}
+
+function MemoryWall() {
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+  const [previewUrls, setPreviewUrls] = useState<string[]>([]);
+  const [uploadedGallery, setUploadedGallery] = useState<string[]>([]);
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState('');
+  const [uploadSuccessMessage, setUploadSuccessMessage] = useState('');
+  const [uploadErrorMessage, setUploadErrorMessage] = useState('');
+
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
+
+    const newFiles = Array.from(files);
+    setSelectedFiles((prev) => [...prev, ...newFiles]);
+
+    newFiles.forEach((file) => {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        if (event.target?.result) {
+          setPreviewUrls((prev) => [...prev, event.target!.result as string]);
+        }
+      };
+      reader.readAsDataURL(file);
+    });
+  };
+
+  const removePhoto = (indexToRemove: number) => {
+    setSelectedFiles((prev) => prev.filter((_, i) => i !== indexToRemove));
+    setPreviewUrls((prev) => prev.filter((_, i) => i !== indexToRemove));
+  };
+
+  const handleAnonymousUpload = async () => {
+    if (selectedFiles.length === 0) return;
+
+    setIsUploading(true);
+    setUploadSuccessMessage('');
+    setUploadErrorMessage('');
+    setUploadProgress(`Procesando ${selectedFiles.length} foto(s)...`);
+
+    try {
+      const formData = new FormData();
+      selectedFiles.forEach((f) => formData.append('file', f));
+
+      const res = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData,
+      });
+
+      const data = await res.json();
+
+      if (!res.ok || data.error) {
+        throw new Error(data.error || 'No se pudo completar la subida.');
+      }
+
+      const newUrls = data.urls || [];
+      setUploadedGallery((prev) => [...prev, ...newUrls]);
+      setUploadSuccessMessage(`¡${newUrls.length} foto(s) subida(s) con éxito al muro! ✨`);
+      setSelectedFiles([]);
+      setPreviewUrls([]);
+    } catch (err: any) {
+      console.error('Error al subir fotos:', err);
+      setUploadErrorMessage(err.message || 'Error al subir fotos. Intenta de nuevo.');
+    } finally {
+      setIsUploading(false);
+      setUploadProgress('');
+    }
+  };
+
+  return (
+    <div className="w-full mt-8">
+      <div className="flex items-center justify-between mb-4 gap-3">
+        <div className="flex items-center gap-2">
+          <Camera className="w-5 h-5 text-[#c62828]" />
+          <p className="font-display text-sm text-[#d4af37] uppercase tracking-widest font-semibold">
+            Muro de Recuerdos
+          </p>
+        </div>
+        <span className="text-[10px] text-[#2c1810]/80 bg-[#d4af37]/20 px-2 py-1 rounded-full font-display uppercase tracking-[0.35em]">
+          {uploadedGallery.length + previewUrls.length} {uploadedGallery.length + previewUrls.length === 1 ? 'foto' : 'fotos'}
+        </span>
+      </div>
+
+      <label className="flex flex-col items-center justify-center w-full p-4 border-2 border-dashed border-[#d4af37]/40 rounded-xl cursor-pointer bg-white/10 hover:bg-[#d4af37]/10 transition-colors text-center group">
+        <Upload className="w-5 h-5 text-[#d4af37] mb-1 group-hover:scale-110 transition-transform" />
+        <p className="text-xs text-[#fdfaf1] font-serif italic">Seleccionar fotos o recuerdos</p>
+        <p className="text-[9px] text-[#d4af37] uppercase mt-0.5 tracking-widest font-display font-bold">
+          Toca aquí para elegir imágenes
+        </p>
+        <input
+          type="file"
+          className="hidden"
+          multiple
+          accept="image/*"
+          onChange={handleFileSelect}
+        />
+      </label>
+
+      {previewUrls.length > 0 && (
+        <div className="mt-4 space-y-3">
+          <p className="text-[10px] font-display uppercase tracking-wider text-[#d4af37] font-semibold">
+            Fotos seleccionadas ({previewUrls.length}):
+          </p>
+          <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
+            {previewUrls.map((src, idx) => (
+              <div key={idx} className="relative aspect-square rounded-lg overflow-hidden border border-[#d4af37]/30 bg-black/10">
+                <img src={src} alt={`Foto seleccionada ${idx + 1}`} className="w-full h-full object-cover" />
+                <button
+                  type="button"
+                  onClick={() => removePhoto(idx)}
+                  className="absolute top-2 right-2 bg-black/60 text-white p-1 rounded-full hover:bg-black"
+                >
+                  <Trash2 className="w-3 h-3" />
+                </button>
+              </div>
+            ))}
+          </div>
+
+          <button
+            type="button"
+            onClick={handleAnonymousUpload}
+            disabled={isUploading}
+            className="w-full py-2.5 bg-[#c62828] hover:bg-[#a51a1a] disabled:opacity-50 text-white text-xs font-display uppercase tracking-[0.15em] rounded-md transition-all"
+          >
+            {isUploading ? 'Subiendo...' : `Subir ${selectedFiles.length} foto(s) al muro`}
+          </button>
+        </div>
+      )}
+
+      {uploadedGallery.length > 0 && (
+        <div className="mt-4 space-y-3">
+          <p className="text-[10px] font-display uppercase tracking-wider text-[#d4af37] font-semibold">
+            Fotos del muro ({uploadedGallery.length}):
+          </p>
+          <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
+            {uploadedGallery.map((url, idx) => (
+              <div key={idx} className="relative aspect-square rounded-lg overflow-hidden border-2 border-[#d4af37] shadow-sm">
+                <img src={url} alt={`Foto subida ${idx + 1}`} className="w-full h-full object-cover" />
+                <div className="absolute top-2 right-2 bg-[#d4af37] text-[#2c1810] rounded-full px-1 text-[10px] font-bold">
+                  ✓
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {uploadProgress && (
+        <div className="mt-4 p-3 bg-[#d4af37]/10 border border-[#d4af37]/30 rounded-xl text-xs text-[#fdfaf1]">
+          {uploadProgress}
+        </div>
+      )}
+
+      {uploadSuccessMessage && (
+        <div className="mt-3 p-3 bg-emerald-600/10 border border-emerald-500/20 rounded-xl text-xs text-emerald-200">
+          {uploadSuccessMessage}
+        </div>
+      )}
+
+      {uploadErrorMessage && (
+        <div className="mt-3 p-3 bg-red-600/10 border border-red-500/20 rounded-xl text-xs text-red-200">
+          {uploadErrorMessage}
+        </div>
+      )}
     </div>
   );
 }
@@ -898,6 +846,8 @@ function GiftPage() {
           </p>
         </div>
       </div>
+
+      <MemoryWall />
     </div>
   );
 }

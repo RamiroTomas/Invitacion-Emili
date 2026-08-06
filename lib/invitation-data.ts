@@ -20,7 +20,7 @@ export const INVITATION_DATA = {
   dressCode: "Vestimenta Formal. Se ruega restringir los colores amarillo dorado y champán.",
   giftRegistry: {
     message: "Mi mayor regalo es tu compañía. Si deseas obsequiarme algo, puedes hacerlo mediante transferencia o en el cofre de la fiesta.",
-    bankDetails: "CBU: 0000000000000000000000\nAlias: EMILIA.BELLA.15\nBanco de Mágica"
+    bankDetails: "Cuenta Prex: 24183881\nEmilia Tomas"
   },
   pages: [
     {
@@ -31,7 +31,7 @@ export const INVITATION_DATA = {
     {
       title: "Mis Recuerdos",
       content: "Te invito a compartir este festejo donde los sueños y el amor por los momentos especiales se hacen realidad.",
-      image: "/images/NAC02484.jpg"
+      image: "/images/NAC02484.jpg.jpeg"
     },
     {
       title: "El Gran Baile",
