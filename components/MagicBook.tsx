@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { ChevronRight, ChevronLeft, MapPin, Calendar, Clock, Shirt, Gift, Camera, Send, Heart, MessageCircle, CheckCircle2, Music, Utensils, X, Maximize2, ExternalLink, Share2, Trash2, Phone, Upload, Loader2, Check, CloudUpload, LogOut, CreditCard, Image as ImageIcon } from 'lucide-react';
+import { ChevronRight, ChevronLeft, MapPin, Calendar, Clock, Shirt, Gift, Camera, Send, Heart, MessageCircle, CheckCircle2, Music, Play, Pause, Utensils, X, Maximize2, ExternalLink, Share2, Trash2, Phone, Upload, Loader2, Check, CloudUpload, LogOut, CreditCard, Image as ImageIcon } from 'lucide-react';
 import { initAuth, googleSignIn, logout, uploadFileToDrive, getOrCreateDriveFolder } from '@/lib/firebase-auth';
 import type { User } from 'firebase/auth';
 
@@ -156,10 +156,14 @@ export default function MagicBook({ adolescentMode = false }: { adolescentMode?:
       <button
         type="button"
         onClick={toggleMusic}
-        className="fixed top-4 right-4 z-50 flex items-center gap-2 rounded-full border border-[#d4af37]/40 bg-[#2c1810]/90 px-3 py-2 text-xs font-display uppercase tracking-[0.2em] text-[#fdfaf1] shadow-lg shadow-black/50 backdrop-blur-md hover:bg-[#2c1810]"
+        className="fixed bottom-4 left-4 z-50 flex h-11 w-11 items-center justify-center rounded-full border border-[#d4af37]/40 bg-[#2c1810]/90 text-[#fdfaf1] shadow-lg shadow-black/50 backdrop-blur-md transition-colors hover:bg-[#2c1810] sm:h-12 sm:w-12"
+        aria-label={isMusicPlaying ? 'Detener música' : 'Reproducir música'}
       >
-        <Music className="w-4 h-4 text-[#d4af37]" />
-        {isMusicPlaying ? 'Pausa' : 'Play'}
+        {isMusicPlaying ? (
+          <Pause className="w-5 h-5 text-[#d4af37]" />
+        ) : (
+          <Play className="w-5 h-5 text-[#d4af37]" />
+        )}
       </button>
       {/* Subtle particle effect or roses in background */}
       <div className="absolute inset-0 opacity-10 pointer-events-none overflow-hidden">
