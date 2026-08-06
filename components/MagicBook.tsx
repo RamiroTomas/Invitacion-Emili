@@ -35,7 +35,7 @@ const Sparkle = ({ className, style }: { className?: string; style?: React.CSSPr
 import { INVITATION_DATA } from '@/lib/invitation-data';
 import Image from 'next/image';
 
-export default function MagicBook() {
+export default function MagicBook({ adolescentMode = false }: { adolescentMode?: boolean }) {
   const [currentPage, setCurrentPage] = useState(0);
   const [direction, setDirection] = useState(0); // 1 for forward, -1 for backward
   const totalPages = INVITATION_DATA.pages.length;
@@ -185,7 +185,7 @@ export default function MagicBook() {
                   ) : INVITATION_DATA.pages[currentPage].type === 'location' ? (
                     <LocationPage />
                   ) : INVITATION_DATA.pages[currentPage].type === 'rsvp' ? (
-                    <RSVPPage />
+                    <RSVPPage adolescentMode={adolescentMode} />
                   ) : INVITATION_DATA.pages[currentPage].type === 'gift' ? (
                     <GiftPage />
                   ) : INVITATION_DATA.pages[currentPage].type === 'teespero' ? (
@@ -385,7 +385,7 @@ function LocationPage() {
   );
 }
 
-function RSVPPage() {
+function RSVPPage({ adolescentMode = false }: { adolescentMode?: boolean }) {
   const [rsvpSent, setRsvpSent] = useState(false);
   const [name, setName] = useState('');
   const [ci, setCi] = useState('');
@@ -404,6 +404,14 @@ function RSVPPage() {
   const handleRSVPSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!name.trim()) return;
+    if (adolescentMode && !ci.trim()) {
+      setRsvpError('En la vista de adolescentes se requiere C.I.');
+      return;
+    }
+    if (adolescentMode && !adultResponsiblePhone.trim()) {
+      setRsvpError('En la vista de adolescentes se requiere Nombre y número de adulto responsable.');
+      return;
+    }
 
     setIsSubmittingRsvp(true);
     setRsvpError('');
@@ -433,24 +441,10 @@ function RSVPPage() {
       setRsvpSent(true);
     } catch (err: any) {
       console.error('Error enviando RSVP:', err);
-      // If Supabase fail or missing, offer fallback to WhatsApp or display error
       setRsvpError(err.message || 'Error al conectar con Supabase.');
     } finally {
       setIsSubmittingRsvp(false);
     }
-  };
-
-  const handleOpenWhatsAppBackup = () => {
-    const cleanNum = phone.replace(/[^0-9]/g, '') || "59899000000";
-    const attendanceText = attending === 'si' ? '¡Sí, asistiré con mucho gusto! ✨' : 'Lamentablemente no podré asistir 💔';
-    const ciText = ci.trim() ? `\n• *C.I.:* ${ci.trim()}` : '';
-    const dietText = diet.trim() ? `\n• *Menú / Restricciones:* ${diet}` : '';
-    const songText = song.trim() ? `\n• *Canción recomendada:* ${song}` : '';
-
-    const message = `¡Hola ${INVITATION_DATA.name}! 🌹\n\nConfirmación de asistencia a tus XV Años:\n• *Nombre:* ${name}${ciText}\n• *Asistencia:* ${attendanceText}${dietText}${songText}\n\n¡Nos vemos pronto!`;
-
-    const whatsappUrl = `https://wa.me/${cleanNum}?text=${encodeURIComponent(message)}`;
-    window.open(whatsappUrl, '_blank');
   };
 
   return (
@@ -480,12 +474,6 @@ function RSVPPage() {
               : 'Se envió tu confirmación.'}
           </p>
           <div className="flex flex-wrap gap-2 justify-center">
-            <button
-              onClick={handleOpenWhatsAppBackup}
-              className="px-4 py-2 bg-[#25D366] hover:bg-[#20ba5a] text-white text-xs font-display tracking-wider rounded-md flex items-center gap-2 shadow transition-all font-semibold"
-            >
-              <MessageCircle className="w-4 h-4 fill-current" /> Enviar copia por WhatsApp
-            </button>
             <button
               onClick={() => {
                 setRsvpSent(false);
@@ -548,15 +536,31 @@ function RSVPPage() {
           {/* C.I. / Cédula de Identidad */}
           <div>
             <label className="block font-display text-[10px] text-[#d4af37] uppercase tracking-widest mb-1 font-semibold flex items-center gap-1">
-              <CreditCard className="w-3 h-3 text-[#c62828]" /> Cédula de Identidad (C.I.)
+              <CreditCard className="w-3 h-3 text-[#c62828]" /> Cédula de Identidad (C.I.) *
             </label>
             <input 
               value={ci}
               onChange={(e) => setCi(e.target.value)}
               placeholder="Ej: 1.234.567-8"
+              required={adolescentMode}
               className="w-full bg-white/80 border border-[#d4af37]/30 rounded-md p-2 focus:outline-none focus:border-[#d4af37] font-serif text-xs text-[#2c1810]" 
             />
           </div>
+
+          {adolescentMode && (
+            <div>
+              <label className="block font-display text-[10px] text-[#d4af37] uppercase tracking-widest mb-1 font-semibold">
+                Nombre y número de adulto responsable *
+              </label>
+              <input
+                required
+                value={adultResponsiblePhone}
+                onChange={(e) => setAdultResponsiblePhone(e.target.value)}
+                placeholder="Ej: +598 99 000 000"
+                className="w-full bg-white/80 border border-[#d4af37]/30 rounded-md p-2 focus:outline-none focus:border-[#d4af37] font-serif text-xs text-[#2c1810]"
+              />
+            </div>
+          )}
 
           {/* Menú / Restricción Alimentaria */}
           <div>
@@ -588,13 +592,6 @@ function RSVPPage() {
           {rsvpError && (
             <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-center space-y-2">
               <p className="text-xs text-red-800 font-serif">{rsvpError}</p>
-              <button
-                type="button"
-                onClick={handleOpenWhatsAppBackup}
-                className="w-full py-1.5 px-3 bg-[#25D366] text-white text-[11px] font-display uppercase tracking-wider rounded flex items-center justify-center gap-1 font-bold"
-              >
-                <MessageCircle className="w-3.5 h-3.5 fill-current" /> Confirmar por WhatsApp en su lugar
-              </button>
             </div>
           )}
 
