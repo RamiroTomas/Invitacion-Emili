@@ -333,7 +333,7 @@ function SchedulePage() {
           </div>
           <div className="max-w-[260px] sm:max-w-[280px]">
             <p className="font-display text-[10px] sm:text-xs text-[#d4af37] tracking-widest uppercase mb-1">Dress Code</p>
-            <p className="font-serif text-lg sm:text-xl leading-snug italic font-medium text-[#2c1810]">{d.dressCode}</p>
+            <p className="font-serif text-lg sm:text-xl leading-snug font-medium text-[#2c1810]">{d.dressCode}</p>
           </div>
         </div>
 
@@ -461,8 +461,8 @@ function RSVPPage({ adolescentMode = false }: { adolescentMode?: boolean }) {
           <Send className="w-5 h-5 text-[#c62828]" />
           <h3 className="font-display text-xl text-[#d4af37] tracking-wider uppercase">Confirmar Asistencia</h3>
         </div>
-        <p className="text-[10px] text-[#2c1810]/80 uppercase tracking-[0.3em] font-display">
-          (Hasta el 10/9)
+        <p className="text-sm sm:text-base text-[#2c1810]/80 uppercase tracking-[0.3em] font-display font-bold">
+          Antes del 10/9
         </p>
       </div>
 
@@ -567,7 +567,7 @@ function RSVPPage({ adolescentMode = false }: { adolescentMode?: boolean }) {
                 required
                 value={adultResponsiblePhone}
                 onChange={(e) => setAdultResponsiblePhone(e.target.value)}
-                placeholder="Ej: +598 99 000 000"
+                placeholder="Ej: Juan +59899123456"
                 className="w-full bg-white/80 border border-[#d4af37]/30 rounded-md p-2 focus:outline-none focus:border-[#d4af37] font-serif text-xs text-[#2c1810]"
               />
             </div>
@@ -829,8 +829,8 @@ function MemoryWall() {
 function GiftPage() {
   const d = INVITATION_DATA;
   return (
-    <div className="w-full h-full p-6 sm:p-10 flex flex-col items-center justify-center text-center">
-      <div className="mb-8">
+    <div className="w-full h-full flex-1 flex flex-col overflow-y-auto min-h-0 p-6 sm:p-10 items-center text-center">
+      <div className="mb-8 w-full">
         <div className="w-16 h-16 rounded-full bg-[#d4af37]/10 flex items-center justify-center border border-[#d4af37]/30 mx-auto">
           <Gift className="w-8 h-8 text-[#c62828]" />
         </div>
@@ -878,14 +878,6 @@ function TeEsperoPage({ page }: { page: any }) {
         }}
       />
 
-      {/* Decorative Top Accent */}
-      <div className="relative z-10 pt-4 flex flex-col items-center gap-2">
-        <p className="font-display text-[10px] sm:text-xs text-[#d4af37] tracking-[0.35em] uppercase font-semibold text-shadow-gold">
-          {INVITATION_DATA.name} • XV AÑOS
-        </p>
-        <div className="w-24 h-[1px] bg-[#d4af37]/60" />
-      </div>
-
       {/* Main Title & Message */}
       <div className="relative z-10 flex flex-col items-center my-auto px-2">
         <motion.div
@@ -909,13 +901,16 @@ function TeEsperoPage({ page }: { page: any }) {
 
         <div className="inline-block px-5 py-2.5 bg-[#d4af37]/15 rounded-full border border-[#d4af37]/40 backdrop-blur-sm shadow-lg">
           <p className="font-display text-sm sm:text-base text-[#FFCE59] tracking-[0.25em] uppercase font-bold text-shadow-gold">
-            19 • SEPTIEMBRE • 2026
+            19 • 09 • 2026
           </p>
         </div>
       </div>
 
-      {/* Decorative Bottom */}
-      <div className="relative z-10 pb-12 sm:pb-8 flex flex-col items-center gap-2">
+      {/* Bottom Accent and Name */}
+      <div className="relative z-10 pb-4 sm:pb-6 flex flex-col items-center gap-3">
+        <p className="font-display text-[10px] sm:text-xs text-[#d4af37] tracking-[0.35em] uppercase font-semibold text-shadow-gold">
+          {INVITATION_DATA.name} • XV AÑOS
+        </p>
         <div className="w-16 h-[1px] bg-[#d4af37]/40" />
       </div>
     </div>

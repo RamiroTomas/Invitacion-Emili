@@ -1,7 +1,7 @@
 export const INVITATION_DATA = {
   name: "Emilia Tomas",
-  date: "19 de Septiembre, 2026",
-  time: "de 21 a 5 hrs",
+  date: "19 de setiembre, 2026",
+  time: "21:00 a 5:00",
   whatsappNumber: "+59899123456", // Cambia esto por el número de WhatsApp de Emilia / Organizador
   cloudinary: {
     cloudName: "qbnzhyou", // Ej: "tu_cloud_name" de Cloudinary
@@ -13,7 +13,7 @@ export const INVITATION_DATA = {
   },
   driveAlbumUrl: "", // Opcional: Link a álbum compartido de Google Photos o Drive
   location: {
-    name: "Chacra las calas",
+    name: "Chacra Las Calas",
     address: "Cam. Altair, 12400 Montevideo, Uruguay",
     mapUrl: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d13106.874136979927!2d-56.1287955!3d-34.7873836!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x95a1d7f6c3210497%3A0x7d6a5c1815d9796!2sCam.%20Altair%2012400%2C%2012400%20Montevideo%2C%20Departamento%20de%20Montevideo!5e0!3m2!1ses-419!2suy!4v1715443200000!5m2!1ses-419!2suy"
   },
