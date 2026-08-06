@@ -317,6 +317,7 @@ function SchedulePage() {
           <div>
             <p className="font-display text-[10px] sm:text-xs text-[#d4af37] tracking-widest uppercase mb-0.5">Horario</p>
             <p className="font-serif text-lg sm:text-xl font-medium text-[#2c1810]">{d.time}</p>
+            <p className="font-serif text-lg sm:text-xl font-medium text-[#2c1810] mt-1">Puntualidad.</p>
           </div>
         </div>
 
@@ -327,7 +328,7 @@ function SchedulePage() {
           </div>
           <div className="max-w-[260px] sm:max-w-[280px]">
             <p className="font-display text-[10px] sm:text-xs text-[#d4af37] tracking-widest uppercase mb-1">Dress Code</p>
-            <p className="font-serif text-sm sm:text-base leading-snug italic font-medium text-[#2c1810]">{d.dressCode}</p>
+            <p className="font-serif text-lg sm:text-xl leading-snug italic font-medium text-[#2c1810]">{d.dressCode}</p>
           </div>
         </div>
 
@@ -450,9 +451,14 @@ function RSVPPage({ adolescentMode = false }: { adolescentMode?: boolean }) {
   return (
     <div className="w-full h-full p-4 sm:p-8 flex flex-col overflow-y-auto">
       {/* Header */}
-      <div className="flex items-center gap-2 mb-4 justify-center">
-        <Send className="w-5 h-5 text-[#c62828]" />
-        <h3 className="font-display text-xl text-[#d4af37] tracking-wider uppercase">Confirmar Asistencia</h3>
+      <div className="flex flex-col items-center gap-2 mb-4 justify-center">
+        <div className="flex items-center gap-2">
+          <Send className="w-5 h-5 text-[#c62828]" />
+          <h3 className="font-display text-xl text-[#d4af37] tracking-wider uppercase">Confirmar Asistencia</h3>
+        </div>
+        <p className="text-[10px] text-[#2c1810]/80 uppercase tracking-[0.3em] font-display">
+          (Hasta el 10/9)
+        </p>
       </div>
 
       {/* Supabase RSVP Form */}
@@ -536,7 +542,7 @@ function RSVPPage({ adolescentMode = false }: { adolescentMode?: boolean }) {
           {/* C.I. / Cédula de Identidad */}
           <div>
             <label className="block font-display text-[10px] text-[#d4af37] uppercase tracking-widest mb-1 font-semibold flex items-center gap-1">
-              <CreditCard className="w-3 h-3 text-[#c62828]" /> Cédula de Identidad (C.I.) *
+              <CreditCard className="w-3 h-3 text-[#c62828]" /> Cédula de Identidad (C.I.){adolescentMode ? ' *' : ''}
             </label>
             <input 
               value={ci}
