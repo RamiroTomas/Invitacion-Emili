@@ -105,11 +105,19 @@ export default function MagicBook({ adolescentMode = false }: { adolescentMode?:
   };
 
   const handleDragEnd = (_: any, info: any) => {
-    const swipeThreshold = 30;
-    if (info.velocity.x < -200 || info.offset.x < -swipeThreshold) {
+    const swipeThreshold = 140;
+    const velocityX = Math.abs(info.velocity.x);
+
+    if (info.velocity.x < -700 || info.offset.x < -swipeThreshold) {
       nextPage();
-    } else if (info.velocity.x > 200 || info.offset.x > swipeThreshold) {
+    } else if (info.velocity.x > 700 || info.offset.x > swipeThreshold) {
       prevPage();
+    } else if (velocityX >= 900 && Math.abs(info.offset.x) < 18) {
+      if (info.velocity.x < 0) {
+        nextPage();
+      } else {
+        prevPage();
+      }
     }
   };
 
@@ -259,24 +267,6 @@ export default function MagicBook({ adolescentMode = false }: { adolescentMode?:
               </motion.div>
             </AnimatePresence>
 
-            {/* Navigation Handlers */}
-            <button 
-              onClick={prevPage} 
-              className={`absolute inset-y-0 left-0 w-16 md:w-24 z-30 flex items-center justify-start pl-1 sm:pl-3 text-[#d4af37] opacity-0 hover:opacity-100 transition-opacity cursor-pointer ${currentPage === 0 ? 'hidden' : ''}`}
-            >
-              <div className="bg-black/20 p-1 sm:p-2 rounded-full backdrop-blur-sm">
-                <ChevronLeft className="w-6 h-6 sm:w-8 sm:h-8 drop-shadow-md" />
-              </div>
-            </button>
-            <button 
-              onClick={nextPage} 
-              className={`absolute inset-y-0 right-1 w-16 md:w-24 z-30 flex items-center justify-end pr-1 sm:pr-3 text-[#d4af37] opacity-0 hover:opacity-100 transition-opacity cursor-pointer ${currentPage === totalPages - 1 ? 'hidden' : ''}`}
-            >
-              <div className="bg-black/20 p-1 sm:p-2 rounded-full backdrop-blur-sm">
-                <ChevronRight className="w-6 h-6 sm:w-8 sm:h-8 drop-shadow-md" />
-              </div>
-            </button>
-            
           </motion.div>
         </div>
       </div>
@@ -285,9 +275,10 @@ export default function MagicBook({ adolescentMode = false }: { adolescentMode?:
           <button 
             onClick={prevPage}
             disabled={currentPage === 0}
-            className={`font-serif text-[10px] sm:text-xs text-[#FFCE59] tracking-widest uppercase transition-opacity ${currentPage === 0 ? 'opacity-10' : 'opacity-60 hover:opacity-100'}`}
+            className={`font-serif text-[10px] sm:text-xs text-[#FFCE59] tracking-widest uppercase transition-all inline-flex items-center gap-1 rounded-full border border-[#FFCE59]/60 bg-[#FFCE59]/10 px-4 py-2 shadow-sm hover:bg-[#FFCE59]/20 hover:scale-105 ${currentPage === 0 ? 'opacity-35 cursor-not-allowed' : 'opacity-90 hover:opacity-100'}`}
           >
-            Prev
+            <ChevronLeft className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+            Ant
           </button>
           <div className="flex gap-2 sm:gap-3 px-2">
             {INVITATION_DATA.pages.map((_, i) => (
@@ -304,9 +295,10 @@ export default function MagicBook({ adolescentMode = false }: { adolescentMode?:
           <button 
             onClick={nextPage}
             disabled={currentPage === totalPages - 1}
-            className={`font-serif text-[10px] sm:text-xs text-[#FFCE59] tracking-widest uppercase transition-opacity ${currentPage === totalPages - 1 ? 'opacity-10' : 'opacity-60 hover:opacity-100'}`}
+            className={`font-serif text-[10px] sm:text-xs text-[#FFCE59] tracking-widest uppercase transition-all inline-flex items-center gap-1 rounded-full border border-[#FFCE59]/60 bg-[#FFCE59]/10 px-4 py-2 shadow-sm hover:bg-[#FFCE59]/20 hover:scale-105 ${currentPage === totalPages - 1 ? 'opacity-35 cursor-not-allowed' : 'opacity-90 hover:opacity-100'}`}
           >
-            Next
+            Sig
+            <ChevronRight className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
           </button>
         </div>
       </div>
