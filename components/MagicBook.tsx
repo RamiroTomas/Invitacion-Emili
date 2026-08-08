@@ -592,7 +592,7 @@ function RSVPPage({ adolescentMode = false }: { adolescentMode?: boolean }) {
           {/* C.I. / Cédula de Identidad */}
           <div>
             <label className="block font-display text-[10px] text-[#d4af37] uppercase tracking-widest mb-1 font-semibold flex items-center gap-1">
-              <CreditCard className="w-3 h-3 text-[#c62828]" /> Cédula de Identidad (C.I.){adolescentMode ? ' *' : ''}
+              <CreditCard className="w-3 h-3 text-[#c62828]" /> Cédula de Identidad{adolescentMode ? ' *' : ' (opcional)'}
             </label>
             <input 
               value={ci}
